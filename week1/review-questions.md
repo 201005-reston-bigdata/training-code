@@ -1,0 +1,13 @@
+- What is Git?
+- What about GitHub? How are they related?
+- What command moves changes from GitHub to our local repo?
+- What command moves changes from our local repo to GitHub?
+- What two commands are used in sequence to save changes to our local repo?
+- What is BASH?
+- What does the PATH environment variable do?
+- What is the JDK and what does it let us do?
+- What is the JRE and what does it let us do?
+- What's another name for .class files?
+- How does Scala relate to Java?
+- What is sbt?
+- How does Scala relate to the JRE and JVM?
