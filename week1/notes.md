@@ -8,5 +8,26 @@ When we install Java, we save the JDK on our local machine.  Just having the JDK
 
 ## Scala Installation
 
-For now, we're just going to use Scala in our IDE (IntelliJ).  IDE is Integrated Development Environment, a program that's useful for developers because it lets us write, run, debug, lint, generate, autocomplete , ... code!  Scala is built using sbt, the scala build tool.  We'll use sbt inside intelliJ. ... continued tomorrow!
+For now, we're just going to use Scala in our IDE (IntelliJ).  IDE is Integrated Development Environment, a program that's useful for developers because it lets us write, run, debug, lint, generate, autocomplete , ... code!  Scala is built using sbt, the scala build tool.  We'll use sbt inside intelliJ.
 
+## REPL
+
+One of the differences/advantages of Scala over Java is the REPL.  REPL stands for Read Eval Print Loop, the REPL provides an interactive command line for your Scala runtime.  This near-instant feedback is very useful when exploring a new API or exploring datasets.  We'll use the REPL occasionally, since it exists everywhere.  In IntelliJ we'll most often use worksheets instead, since they add some features and save progress.  The REPL saves the results from our expressions in values res#, with the # starting at 1 and icnrementing.  We can access
+values returned earlier in our REPL session using these names.
+
+## Scala Features
+
+- High level language (abstracts away the hardware, runs on the JVM)
+- Statically typed, meaning variables can't change types
+- Has a type inference system, so type does not always need to be declared.  Cuts down on the Java repetition
+- Compiles down to .class files that run on the JVM
+- Lets us easily use Java libraries in our Scala code.
+- Supports OOP Paradigm: Abstraction, Encapsulation, Inheritance, Polymorphism, Classes + Objects:
+  - In Scala we can create classes that are like blueprints used to create objects.  We create objects that are instances of those classes.
+  - If you're coming from Java: In Scala we don't have static members (no state or behaviour on class itself), instead we have a Singleton object that works with each class.
+  - OOP organizes our code into objects which have state and behaviour.  The interaction of those objects specifies how our application will run.
+- Supports FP Paradigm: Functions as first class citizens
+  - Something being a "first class citizen" of a language means that it can be passed into functions, returned from functions, and stored in variables and data structures.
+  - This means in Scala (and other FP langs), functions can be returned from other functions, functions can be passed into functions as args, functions can be stored in data structures, ...
+  - FP organizes our code into *pure functions* that each only take an input and produce an output.  Our application works via calling and composing those functions.
+- Both of these programming paradigms are ways to organize a codebase that grows large over time and has multiple people working on it.
