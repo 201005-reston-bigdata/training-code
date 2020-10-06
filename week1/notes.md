@@ -31,3 +31,17 @@ values returned earlier in our REPL session using these names.
   - This means in Scala (and other FP langs), functions can be returned from other functions, functions can be passed into functions as args, functions can be stored in data structures, ...
   - FP organizes our code into *pure functions* that each only take an input and produce an output.  Our application works via calling and composing those functions.
 - Both of these programming paradigms are ways to organize a codebase that grows large over time and has multiple people working on it.
+
+## OOP Basics
+
+In OOP you create your application by defining classes and instantiating objects from those classes.  We create classes using the "class" keyword and create objects using the "new" keyword + a constructor.  The class lets us define state + behaviour (fields + methods) for objects.
+There are the classic OOP examples of Dog classes that define name, age, color fields and have methods like bark, run, ...
+More realistically, our OOP applications will have classes like JsonDeserializer or DbConnectionUtil that help us to deserialize JSON and connect to a Database.
+The appeal of using classes and objects is that it lets us compartimentalize our code and makes our application more modular.  If we put all of our logic for reading and writing JSON into one class, then we don't need to write that logic anywhere else in our application, AND we can reuse that JsonDeserializer class across applications.  We have 4 pillars of OOP: Abstraction, Encapsulation, Polymorphism, Inheritance:
+- Abstraction : hiding irrelevant detail (often implementation) and presenting only relevant details.  Abstraction means we can use objects that we don't understand the guts of.
+- Encapsulation : "Data hiding", encapsulation means that Objects take control/responsibility for their own state, and protect their state from outside interference.
+- Polymorphism : "Many Forms", an Object can take an appropriate from based on the context and a method can take an appropriate form based on the context.  An example is that we might have many different types of Objects that are all written to file in the same way.  Another example is both Person and DetailedPerson objects are printed the same way -- using toString.
+- Inheritance : Classes can have superclasses that they inherit from and subclasses that inherit from them.  Inheritance lets us share state + behaviour both from superclasses to subclasses.  The subclass will have the fields + methods of the superclass.  We also say "Parent" and "Child" classes for super and subclasses.
+
+In Java/Scala every single Class inherits from the Object class.  This means any state + behaviour in the Object class is shared with every single Object.  A punchline: every single Object has a toString method.  Object polymorphism means that every single Object can be treated as an instance of Object.
+

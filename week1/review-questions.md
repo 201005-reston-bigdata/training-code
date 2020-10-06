@@ -7,7 +7,7 @@
 - What does the PATH environment variable do?
 - What is the JDK and what does it let us do?
 - What is the JRE and what does it let us do?
-- What's another name for .class files?
+- What's the name for the code written in .class files?
 - How does Scala relate to Java?
-- What is sbt?
+- What is sbt (high level)?
 - How does Scala relate to the JRE and JVM?
