@@ -11,3 +11,28 @@
 - How does Scala relate to Java?
 - What is sbt (high level)?
 - How does Scala relate to the JRE and JVM?
+
+
+- Is Scala statically or dynamically typed?
+- Do we need to declare type for our variables in Scala? always?
+- What are integer types in Scala?
+- Decimal types?
+- What is the size of an Int? a Double? (the default integer and decimal types)
+- What is the difference between val and var?
+- Why do we make use of programming paradigms like Functional Programming and Object Oriented Programming?
+- What are the 4 pillars of OOP: Abstraction, Encapsulation, Inheritance, Polymorphism? (a bit on each)
+- What are classes? Objects?
+- What is the significance of the Object class in Scala?
+- What does it mean that functions are first class citizens in Scala?
+- What is a pure function?
+- What is a side effect?
+- What's the difference between an expression and a statement?
+- Is if-else an expression or a statement in Scala?
+- What's the difference between a while loop and a do-while loop?
+- How does String interpolation work in Scala?
+- How do operators work in Scala?  Where is "+" defined?
+- What are the ways we could provide default values for a field?
+- How do we define an auxiliary constructor?
+- What is an enumeration?
+- What is a REPL?
+- How does the Scala REPL store the results of evaluated expressions?
