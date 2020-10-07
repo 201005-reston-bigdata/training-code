@@ -45,3 +45,39 @@ The appeal of using classes and objects is that it lets us compartimentalize our
 
 In Java/Scala every single Class inherits from the Object class.  This means any state + behaviour in the Object class is shared with every single Object.  A punchline: every single Object has a toString method.  Object polymorphism means that every single Object can be treated as an instance of Object.
 
+## FP Basics
+
+In Functional Programming, we write our applications as pure functions and the application functions by applying and composing those functions.  To apply a function is to use it, for example the function we pass to map is applied to each element in the collection.  The compose two functions is to apply them in sequence, to put them together.  Composing f ang g would give you a new function defined as h(x) => f(g(x)).  Instead of called map twice in our REPL demo, to first addOne, then to double, we could *compose* the addOne and double functions and call map just once with the result of the composition.
+
+A pure function is a function that takes only arguments and produces only a return value.  It shouldn't read any information for elsewhere, and it shouldn't do anything other than returning.  No printing, no writing to disk, no accessing fields on external objects, ... JUST taking an input and producing an output.  One way you know you have a pure function is if the function *always* returns the same value if given the same input.  Effects that a function has other than returning are called *side effects* and should be avoided in pure functions.
+
+2 main advantages of pure functions : a pure function is easy to reason about because we don't need to consider anything outside of the function.  Also, pure functions are very easy to test.  All you need to do is give them an input and verify the output.
+
+Typically in FP, we keep track of no mutable state in our application.  For us, we'll fuzz this a bit and keep limited mutable state.  Any time we're using map, reduce, filter, fold those functions will produce new values rather than modifying existing arrays.  Keeping no mutable state in your applciation also makes your application easier to reason about because you no longer have to worry about how that state is evolving through time.
+
+Functions as first class citizens enable *higher order functions*.  A higher order function is just a function that takes another function as an argument and/or returns a function.  map, reduce, fitler, fold are higher order functions.
+
+A Lambda is a function defined inline.  In Scala, we use (params) => {body}.  We have shorthand that lets us skip () for one parameter functions, and we have the _ shorthand that lets us skip most of the lambda expression.  Example: _ > 4 is almost (type diff) the same as (x: Int) => x > 4
+
+Recursion is when a function calls itself.  In order to effectively write recursive functions, we need to follow some rules.  We'll need for our recursive function to change something about each call -- your recursive function should never call itself in exactly the same way that it was called.  This is called a "recursive step".  We also need some condition where the function won't call itself, instead it just returns a value.  This is called a "base case" or "exit condition".  We'll see an example after lunch.
+
+In Scala, a return type of "Unit" means that the function doesn't return.  It's similar to void in Java.  after lunch : discuss Unit, Nil, None, Nothing
+
+Scala:
+def myCompose(f : Int => Int, g : Int => Int): Int => Int = {
+   (x: Int) => f(g(x))
+}
+Without type declarations:
+def myCompose(f, g) = {
+    x => f(g(x))
+}
+
+Three higher order functions that are common + good to be familiar with:
+- map : when we call map on a collection, we pass it a function and map produces a new collection by applying that function to each element of the prior collection.  All functions passed to map should be pure.  If you want to instead have some side effects for each element in a collection, use forEach instead.
+- filter : when we call filter on a collection, we pass it a function that returns a boolean, and filter produces a new collection containing only the elements which produce true.
+- reduce : when we call reduce on a collection, we pass reduce a function that takes 2 parameters and returns one result.  Reduce calls that function repeatedly, making use of the prior return and each element of the collection in turn.  Calling reduce on a collection will result in producing a single value, hence the name reduce.  Example with generic function: List(1,2,3,4).reduceLeft(f) wouldfirst evaluate f(1,2), then evaluate f(f(1,2), 3), then f(f(f(1,2), 3), 4).  Lets see a sum in the REPL
+
+
+
+
+
