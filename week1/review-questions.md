@@ -36,3 +36,20 @@
 - What is an enumeration?
 - What is a REPL?
 - How does the Scala REPL store the results of evaluated expressions?
+
+
+- What is a higher order function?
+- What is function composition?
+- Why might we want to write an application using pure functions instead of impure functions?
+- Why might we want mutable state (OOP) in our application?  Why might we want immutable state (FP)?
+  - This question is open-ended, don't focus on finding the "right" answer
+- What are some examples of side effects?
+- What is a Lambda?
+- How can we write Lambdas in Scala?
+- What does map do?
+- What does filter do?
+- What does reduce do?
+- What does it mean that a function returns Unit in Scala?
+- What is recursion?
+- What do we need to include in any effective recursive function?
+

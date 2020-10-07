@@ -61,7 +61,7 @@ A Lambda is a function defined inline.  In Scala, we use (params) => {body}.  We
 
 Recursion is when a function calls itself.  In order to effectively write recursive functions, we need to follow some rules.  We'll need for our recursive function to change something about each call -- your recursive function should never call itself in exactly the same way that it was called.  This is called a "recursive step".  We also need some condition where the function won't call itself, instead it just returns a value.  This is called a "base case" or "exit condition".  We'll see an example after lunch.
 
-In Scala, a return type of "Unit" means that the function doesn't return.  It's similar to void in Java.  after lunch : discuss Unit, Nil, None, Nothing
+In Scala, a return type of "Unit" means that the function doesn't return.  It's similar to void in Java.  Nothing is also for functions that don't return anything.  The difference is that Unit is for functions that don't return anything and are run for their side effects.  Nothing is the return for functions that should never return, meaning they always throw an Exception during execution and never successfully return.  We'll see Unit much more often than we'll see Nothing.
 
 Scala:
 def myCompose(f : Int => Int, g : Int => Int): Int => Int = {
