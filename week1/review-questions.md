@@ -97,7 +97,11 @@ We use these programming paradigms to organize a code base that grows larger ove
 
 Abstraction is the act of hiding complexity from the end-user, by providing a front-end interface for the user to interact with the object or program, without having to know the details of what is going behind the scenes.  
 
-Encapsulation 
+Encapsulation is the principle that Objects should take care of their own data.  This means that the object projects its state (values) through the use of getters and setters so that they cannot be directly manipulated.
+
+Inheritance is the strategy of using inherited Classes (the Superclass) to reuse code.  In this way a child class can inherit the attributes and methods of its parent class.
+
+Polymorphism or multiple forms, allows an object to take on different characteristics and respond in different ways depending on the parameters it is provided (method overloading/static polymorphism/compile-time).  A different signature (set of parameters) will trigger different methods (ex: animal class, that is a parent to dog and cat subclasses.  Depending on child class, speak() will output different strings.) Another form of polymorphism is runtime polymorphism (dynamic polymorphism) which involves multiple classes where methods will be different but have the same name and signature (set of parameters).
 
 - What are classes? Objects?
 
@@ -132,6 +136,16 @@ The if-else construct is an expression in Scala because it always returns a resu
 The while loop will only execute if the a condition is met, where a do-while loop is guaranteed to execute at least once even if ithe condition is false.
 
 - How does String interpolation work in Scala?
+
+Strings can be interpolated so that variable references can be put inside the quotes of string literals and processed inline.  There are three prepended symbols that provide different interpolation methods.  They are `s`, `f` and `raw`.  `s` is the String interpolator and when it is used:
+```
+var month = "October"
+var date = 1
+println(s"Today is $month $date") // Today is October 1
+```
+The variables will be output as Strings.
+
+The `f` Interpolator variables must be referenced with a printf-style variable type reference.  It is typesafe.  The `raw` interpolator will output the literal string without escaping any literals (ex: \n)
 
 - How do operators work in Scala?  Where is "+" defined?
 
