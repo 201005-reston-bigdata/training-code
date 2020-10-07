@@ -91,7 +91,7 @@ A variable initialized with the `val` keyword will be *immutable*.  A variable w
 
 - Why do we make use of programming paradigms like Functional Programming and Object Oriented Programming?
 
-
+We use these programming paradigms to organize a code base that grows larger over time, and has many people working on it.  It creates a consistent way to build software.  It helps to manage complexity in a large body of code.
 
 - What are the 4 pillars of OOP: Abstraction, Encapsulation, Inheritance, Polymorphism? (a bit on each)
 
@@ -100,17 +100,31 @@ Abstraction is the act of hiding complexity from the end-user, by providing a fr
 Encapsulation 
 
 - What are classes? Objects?
+
+A class is user-defined blueprint to create an object.  A class can contain fields and methods and is identified with a name (identifier). An object is an instance of class, when it is created a place in memory is referenced for it and the class constructor is called.
+
 - What is the significance of the Object class in Scala?
+
+
 - What does it mean that functions are first class citizens in Scala?
+
+This means that functions will support all operations available to other entities (like variables).  They can be assigned to a variable, passing them as arguments (parameters) and return them from functions.  An example is *map* which takes a list and function as an argument and returns a list after applying the function.
+
 - What is a pure function?
+
+A pure function does not cause any side effects.  It does not access external objects, for example changing variables or data, print, or output to disk, it simply returns a value consistently.  Given the same input, it will always return the same output. Pure functions will not break anything outside the function, guarantees order of execution, makes unit testing easier, making caching easer, makes the code self-contained and easier to understand, with no unexpected side-effects.
+
 - What is a side effect?
+
+A side effect is a change in the state of variables, printing or outputting to display or filesystem, or has another observable effect besides returning a value to the invoker of the function.
+
 - What's the difference between an expression and a statement?
 
  An expression is a unit of code that returns a value.  A statement is a unit of code that doesn't return a value.  Multiple expressions can be combined with curly braces to create an *expression block*. A common statement is println() and value and variable definitions.  A good reference available at https://www.oreilly.com/library/view/learning-scala/9781449368814/ch03.html
 
 - Is if-else an expression or a statement in Scala?
 
-The if-else construct is an expression becauyse it always returns a result.
+The if-else construct is an expression in Scala because it always returns a result.
 
 - What's the difference between a while loop and a do-while loop?
 
