@@ -90,7 +90,15 @@ The decimal types available in Scala are:
 A variable initialized with the `val` keyword will be *immutable*.  A variable with `var` will be *mutable*. 
 
 - Why do we make use of programming paradigms like Functional Programming and Object Oriented Programming?
+
+
+
 - What are the 4 pillars of OOP: Abstraction, Encapsulation, Inheritance, Polymorphism? (a bit on each)
+
+Abstraction is the act of hiding complexity from the end-user, by providing a front-end interface for the user to interact with the object or program, without having to know the details of what is going behind the scenes.  
+
+Encapsulation 
+
 - What are classes? Objects?
 - What is the significance of the Object class in Scala?
 - What does it mean that functions are first class citizens in Scala?
@@ -110,11 +118,23 @@ The while loop will only execute if the a condition is met, where a do-while loo
 
 - How does String interpolation work in Scala?
 - How do operators work in Scala?  Where is "+" defined?
+
 - What are the ways we could provide default values for a field?
+
+
+
 - How do we define an auxiliary constructor?
+
+An auxillary constructor takes care of cases where a function is not provided with all of the arguments (parameters) it requires to initialize.  Auxillary constructors can be made for different cases where certain parameters are left out, or for all-other cases so that the object can be initialized even if it doesn't receive all the values it requires.
+
 - What is an enumeration?
+
+An enumeration is a limited set of values for a particular case.  We can use enumerations to limit the choices that can be sent to a function to prevent input values that are outside of what values are expected.
 
 - What is a REPL?
 
 REPL stands for Read-Evaluate-Print-Loop and is a command line tool that can be used to try out Scala code.  To enter the Scala REPL, use the command `scala` or open a Scala worksheet in Intellij.  You will be able to write Scala expressions and see the output.  The REPL will automatically assign variables for the output of expressions. Use :help for list of commands, :quit to exit.
+
 - How does the Scala REPL store the results of evaluated expressions?
+
+The REPL will store the results (return values) of evaluated expressions in a variable that is available for reuse.
