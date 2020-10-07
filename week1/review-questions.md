@@ -58,11 +58,37 @@ Scala programs are translated into Java bytecode which is loaded into the JRE al
 ---
 
 - Is Scala statically or dynamically typed?
+
+Scala is statically typed.  Every piece of data is an object, every object has a type.  Static typing means the type is checked at compilation.  Using the wrong type in an expression will cause a compilation (rather than runtime error).  This results in more robust and trustworthy code.
+
 - Do we need to declare type for our variables in Scala? always?
+
+Scala provides type inference, which means that Scala will try and guess the type of the data your are assigning to your variable.  We do not always have to declare the type of our variables.  
+
 - What are integer types in Scala?
+
+The integer types available in Scala are:
+  - Byte (8 bits) (-2^7 to 2^7-1, inclusive)
+  - Short (16 bits) (-2^15 to 2^15-1, inclusive)
+  - Int (32 bits) (-2^31 to 2^31-1, inclusive) *default*
+  - Long (64 bits) (-2^63 to 2^63-1, inclusive)
+  - BigInt 
+
 - Decimal types?
+
+The decimal types available in Scala are:
+  - Double (32 bits) (IEEE 754 single-precision float) *default*
+  - Float (64 bits) (IEEE 754 double-precision float) 
+  - BigDecimal
+  
 - What is the size of an Int? a Double? (the default integer and decimal types)
+  - Int (32 bits) (-2^31 to 2^31-1, inclusive) *default*
+  - Double (32 bits) (IEEE 754 single-precision float) *default*
+
 - What is the difference between val and var?
+
+A variable initialized with the `val` keyword will be *immutable*.  A variable with `var` will be *mutable*. 
+
 - Why do we make use of programming paradigms like Functional Programming and Object Oriented Programming?
 - What are the 4 pillars of OOP: Abstraction, Encapsulation, Inheritance, Polymorphism? (a bit on each)
 - What are classes? Objects?
@@ -71,12 +97,24 @@ Scala programs are translated into Java bytecode which is loaded into the JRE al
 - What is a pure function?
 - What is a side effect?
 - What's the difference between an expression and a statement?
+
+ An expression is a unit of code that returns a value.  A statement is a unit of code that doesn't return a value.  Multiple expressions can be combined with curly braces to create an *expression block*. A common statement is println() and value and variable definitions.  A good reference available at https://www.oreilly.com/library/view/learning-scala/9781449368814/ch03.html
+
 - Is if-else an expression or a statement in Scala?
+
+The if-else construct is an expression becauyse it always returns a result.
+
 - What's the difference between a while loop and a do-while loop?
+
+The while loop will only execute if the a condition is met, where a do-while loop is guaranteed to execute at least once even if ithe condition is false.
+
 - How does String interpolation work in Scala?
 - How do operators work in Scala?  Where is "+" defined?
 - What are the ways we could provide default values for a field?
 - How do we define an auxiliary constructor?
 - What is an enumeration?
+
 - What is a REPL?
+
+REPL stands for Read-Evaluate-Print-Loop and is a command line tool that can be used to try out Scala code.  To enter the Scala REPL, use the command `scala` or open a Scala worksheet in Intellij.  You will be able to write Scala expressions and see the output.  The REPL will automatically assign variables for the output of expressions. Use :help for list of commands, :quit to exit.
 - How does the Scala REPL store the results of evaluated expressions?
