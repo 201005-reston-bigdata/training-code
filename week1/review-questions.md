@@ -105,6 +105,7 @@ A class is user-defined blueprint to create an object.  A class can contain fiel
 
 - What is the significance of the Object class in Scala?
 
+Everything in Scala is an object.  There are no primitives, numbers are objects.  Functions are objects.
 
 - What does it mean that functions are first class citizens in Scala?
 
@@ -131,11 +132,32 @@ The if-else construct is an expression in Scala because it always returns a resu
 The while loop will only execute if the a condition is met, where a do-while loop is guaranteed to execute at least once even if ithe condition is false.
 
 - How does String interpolation work in Scala?
+
 - How do operators work in Scala?  Where is "+" defined?
+
+Operators are methods that are connected to objects.  They are overriden from the base class and have specific functionality depending on the class of the object its attached to.  
 
 - What are the ways we could provide default values for a field?
 
+We can define them in the primary Class constructor:
+```
+class Car(var color: String = "white", var doors: Int = 4) 
+```
+We can also define them in auxillary class constructors:
+```
+class Car(var color: String, var doors: Int) {
+  def this(color: String) = {
+    this(color, 4)  // accepts color parameter and sets doors to default of "4"
+  }
+  def this(doors: Int) = {
+    this("white", doors)
+  }
+  def this() = {
+    this("white", 4) // sets both default parameters.
+  }
+}
 
+```
 
 - How do we define an auxiliary constructor?
 
