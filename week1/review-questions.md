@@ -197,17 +197,39 @@ The REPL will store the results (return values) of evaluated expressions in a va
 # Day 3
 
 - What is a higher order function?
+
+A higher order function is a function that either takes a function as an argument or returns a function.
+
 - What is function composition?
+
+Function composition is the act of building more complex functions by combining simple functions.  It encourages the factoring (breaking apart) of complex functions.  The result of one function is passed into the next function as an argument.  The result of the final function is the result of the whole.
+
 - Why might we want to write an application using pure functions instead of impure functions?
+
+Pure functions are predictible and easy to test, while impure functions can be unpredictible and have unexpected side effects.  Impure functions also are harder to test because state may have been changed outside of the context of the function.
+
 - Why might we want mutable state (OOP) in our application?  Why might we want immutable state (FP)?
   - This question is open-ended, don't focus on finding the "right" answer
+Having immutable state (FP) will allow us to more easily run applications in parallel, and startup and stop services without having to retrieve or store a particular state.   Mutable state is useful, though more difficult to manage, in cases where customization or "distinct identity" are used.  Rather than create new instances of an object everytime a change is made, keeping the same object and modifying the attributes may be more efficient.  
+  
 - What are some examples of side effects?
+
+Some examples of side effects are: 
+
 - What is a Lambda?
 - How can we write Lambdas in Scala?
 - What does map do?
+
 - What does filter do?
 - What does reduce do?
 - What does it mean that a function returns Unit in Scala?
+
+This means that the function is not expected to have a return value.  These kinds of functions are run for their side effects.
+
 - What is recursion?
+
 - What do we need to include in any effective recursive function?
 
+- What is parameterized typing?
+
+Parameterized typing is where we say Array[Int] to make an int array or Array[String] to make a string array.  Parameterized typing just means that the type is accepted as a parameter. (samuel owens)
