@@ -1,3 +1,5 @@
+# Day 1
+
 - What is Git?
 
 Git is a version control system (VCS) for source code.  It tracks changes to source code and provides support for branching and distributed development.  Its efficient and very fast and scalable.  Its also available on most operating systems, including linux, windows and macos.  
@@ -55,7 +57,10 @@ sbt is a software tool for building Scala and Java projects.  It helps organize 
 
 Scala programs are translated into Java bytecode which is loaded into the JRE along with the classes and libraries it requires.  The JVM is installed along witht he JRE and the JVM interprets the bytecode.  The JVM does the heavy lifting when it comes with interacting with different operating systems and computers. A useful illustration is available at https://getkt.com/blog/difference-between-jdk-jre-and-jvm-explained-java/
 
----
+
+
+# Day 2
+
 
 - Is Scala statically or dynamically typed?
 
@@ -189,8 +194,7 @@ REPL stands for Read-Evaluate-Print-Loop and is a command line tool that can be 
 
 The REPL will store the results (return values) of evaluated expressions in a variable that is available for reuse.
 
-- How does the Scala REPL store the results of evaluated expressions?
-
+# Day 3
 
 - What is a higher order function?
 - What is function composition?
