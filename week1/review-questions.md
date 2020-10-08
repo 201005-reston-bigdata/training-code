@@ -53,3 +53,24 @@
 - What is recursion?
 - What do we need to include in any effective recursive function?
 
+- What is the Stack? What is stored on the Stack?
+- What is the Heap? What is stored on the Heap?
+- What is garbage collection?
+- When is an object on the Heap eligible for garbage collection?
+- How do methods executing on the stack interact with objects on the heap?
+- Know the basics of the following Scala Collections: (mutable? indexed? when to use it?)
+  - List
+  - Set
+  - Map
+  - ArrayBuffer
+  - Vector
+- What is a generic?
+  - the phrase "compile time type safety" is useful in this answer
+- What is an Option?
+- What is found inside an empty Option?
+- How do we write an Option that contains a value?
+- What are Exceptions?
+- What are Errors?
+- What is Throwable?
+- How would we write code that handles a thrown Exception?
+- How do we write code to throw an Exception?
