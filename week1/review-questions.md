@@ -214,21 +214,41 @@ Having immutable state (FP) will allow us to more easily run applications in par
   
 - What are some examples of side effects?
 
-Some examples of side effects are: 
+Some examples of side effects are: outputting to screen or filesystem (I/O) , modifying a mutable variable or data structure, throwing exceptions or errors.
 
 - What is a Lambda?
+
+A Lambda (or lambda function, lambda expression, anonymous function, or closure) is a nameless function written inline.  Its an expression which can be used in place of a variable/value.
+
 - How can we write Lambdas in Scala?
+
+One parameter: val mySum = (x: Int) => x + x    
+Two parameters (using type inference):  val myName = (first: String, last: String) => first + " " + last
+Two paraemters (w/o type inference): val myName: (String, String) => String = (first: String, last: String) => first + " " + last
+
 - What does map do?
 
+Map takes in an iterable data structure and a function (this can also be a lambda/anonymous function), and returns an iterable data structure made up of the result of applying the function to each element in the original.  To forgo the returned collection, we can use foreach for situations where we need to create side effects but dont care about the return value.
+
 - What does filter do?
+
+Filter takes in an iterable and a function that evaluates each element in the collection and returns a boolean.  It returns only the elements from the original collection that return a true value.
+
 - What does reduce do?
+
+Reduce takes in an iterable and a function that takes 2 parameters and applies the function to the pair, it then takes that output and uses it as one of the parameters for the next iteration, and using the next element of the original iterable as the other.  It continues this until it goes through each element of the collection.
+
 - What does it mean that a function returns Unit in Scala?
 
 This means that the function is not expected to have a return value.  These kinds of functions are run for their side effects.
 
 - What is recursion?
 
+Recursion is the defining of something in terms of itself.  In programming recursive functions are functions which calls itself as a subfunction repeatedly.  It is useful in solving problems whose solutions are smaller versions of itself, so by breaking the problem down into smaller and smaller pieces and then combining the results.  Also called the divide-and-conquer method.
+
 - What do we need to include in any effective recursive function?
+
+To prevent a recursive function from calling itself infinitely there needs to be a base case (smallest division of the problem).  The base case is the point at which the problem can no longer be divided and whose solution can be returned directly.
 
 - What is parameterized typing?
 
