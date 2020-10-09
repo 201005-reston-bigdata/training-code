@@ -108,3 +108,14 @@ An Error is normally something that has gone wrong with the functioning of the J
   - test : runs any tests in src/test/scala. We haven't done this yet.
   - reload : reloads any changes made to build.sbt
 
+
+## Options
+
+The motivation for Options is to handle missing data while avoiding null values.  You can see them as a more functional way of handling problems than Exception handling.  An Option is like a container that will either contain Some(value) or None.  We can call methods on the Option, and we don't need to resolve it to Some/None immediately.  This helps us to not have to write a lot of existence checks while we're transforming data.
+
+When we specify something is an Option, we use a generic to specify the type of thing contained in the Option. Option[String] might contain:
+Some("Hello"), Some("Scala rules"), Some("123"), None, ...
+If we have an Option[Int] it might contain: None, Some(-70), Some(100), Some(2), ...
+
+When we use Generics, we write the Type in [].  The simplest use case for Generics is to specify the type of objects contained in a collection or an option or similar.  When we use Generics with collections, they provide "compile time type safety".  Generics enables the compiler to catch us putting a String into a List[Int] or an Int into a List[String] and fail to compile.  In general, we prefer to have problems appear at compile time instead of runtime.
+
