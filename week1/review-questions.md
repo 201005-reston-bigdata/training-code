@@ -74,3 +74,16 @@
 - What is Throwable?
 - How would we write code that handles a thrown Exception?
 - How do we write code to throw an Exception?
+
+- What does the src folder contain in an sbt project?
+- the target folder?
+- What is a Trait?
+- What is a case class?
+- What methods get generated when we declare a case class?
+- What does the apply method do?
+- What is a Thread?
+- What is a Future?
+- In what situations might we want to use multiple threads? (just some)
+- How can we do something with the result of a Future?
+- How does a Future return a value or exception?
+- How does the onComplete callback function work?
