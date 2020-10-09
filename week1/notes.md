@@ -78,6 +78,35 @@ Three higher order functions that are common + good to be familiar with:
 - reduce : when we call reduce on a collection, we pass reduce a function that takes 2 parameters and returns one result.  Reduce calls that function repeatedly, making use of the prior return and each element of the collection in turn.  Calling reduce on a collection will result in producing a single value, hence the name reduce.  Example with generic function: List(1,2,3,4).reduceLeft(f) wouldfirst evaluate f(1,2), then evaluate f(f(1,2), 3), then f(f(f(1,2), 3), 4).  Lets see a sum in the REPL
 
 
+## Exceptions + Errors + Handling
 
+In Scala, we have two different classes that both extend (subclass) Throwable.  These are Exception and Error.
+Both of them are capable of interrupting normal program flow.  When we "throw" an Exception or Error
+it causes regular program flow/regular function execution to cease until the Exception/Error is caught and handled.
 
+Eventually a method/function will catch the Exception and handle it.  If this doesn't occur, the JVM catches it, prints
+ and exits.  When the Exception is caught and handled, program flow resumes from that point, not from where the Exception was thrown.
 
+An Exception is some exceptional behaviour -- something unanticipated has occurred.  We might use classes/methods/objects/... inappropriately, which may cause them to throw Exceptions.  We might also write our code to throw Exceptions when something exceptional happens (normally this means something has gone wrong).  Examples built in : ArrayIndexOutOfBoundsException, ArithmeticException, FileNotFoundException, ...
+In general, we should attempt to recover from Exceptions.
+
+An Error is normally something that has gone wrong with the functioning of the JVM itself.  Examples are StackOverflowError and OutOfMemoryError.  We typically shouldn't / can't recovers from Errors.
+
+## sbt and Scala projects:
+
+- When we create a Scala project using sbt, we get src, target, and project folders:
+  - src contains our source code.  src/main/scala is our scala code, src/test/scala is our tests
+  - target contains compilation products, the .class files + more that are produced when we build our Scala project.
+  - project contains information about the sbt project, we'll put things like plugins here
+- We also get a build.sbt file.  This file specifies information about out project, including necessary dependencies.
+- the .bsp and .idea folders are for IntelliJ and integrating it with sbt, not from sbt itself.
+
+- To write the entry point for a Scala app, just write an object that extends App.
+- We can use the sbt shell to compile, run, and test our application.  Sbt commands to know for now:
+  - compile : compiles .scala files into .class files in target folder
+  - run : runs your application
+  - test : runs any tests in src/test/scala. We haven't done this yet.
+  - reload : reloads any changes made to build.sbt
+
+TODOS:
+obj created lazily when referenced.  use Any (like TS).  Not yet covered case class and case object.  Do this tomorrow morning.
