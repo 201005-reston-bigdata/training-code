@@ -119,3 +119,31 @@ If we have an Option[Int] it might contain: None, Some(-70), Some(100), Some(2),
 
 When we use Generics, we write the Type in [].  The simplest use case for Generics is to specify the type of objects contained in a collection or an option or similar.  When we use Generics with collections, they provide "compile time type safety".  Generics enables the compiler to catch us putting a String into a List[Int] or an Int into a List[String] and fail to compile.  In general, we prefer to have problems appear at compile time instead of runtime.
 
+## More Scala OOP:
+
+- Traits : A Trait is Scala's version of Java's Interface.  Traits are used to share interfaces and methods between classes.  We use Traits in conjuction with classes.  Where the class will describe what an object is, the Trait will describe something about the object.  Classes can/do have many traits.  When we define a trait we can specify (1) its name, (2) abstract methods, and (3) concrete methods.
+  - (1) The name of a trait is sometimes all we need.  Sometimes our Traits just mark a class and provide no other functionality.
+  - (2) an abstract method is a method without an implementation.  Traits with abstract methods are like contracts that a class with those Traits must fulfill.  An abstract method has a name and a signature but no implementation (no abstract keyword necessary)
+  - (3) concrete methods are non-abstract methods.  Methods with an implementation.  Traits with concrete methods add some functionality to classes with those traits.
+Any trait can have any combination of abstract/concrete methods.
+
+- Case Classes : case classes provide some shorthand that is useful when defining immutable classes used for structuring data in FP-style code.  We call anything like case classes that don't functionality but do provide shorter syntax "syntactic sugar".  WHat they do:
+- fields are val by default, accessor methods are generated, since fields are val they ofc can't be changed
+- equals and hashCode methods are generated based on the fields.  This means we can use .equals as we expect and put them in Sets + Maps.
+- toString method is generated that provides a decent printout.
+- a copy method is generated.  This copy method will let us make modified copies of our objects without changing the original.  Makes it easy to "update" instances of the case class, where in FP-style all updates are modified copies that don't change the original.
+- apply and unapply methods are generated in a companion object.
+  - apply is a method that lets us create instances without using the new keyword.  We've seen this in action, even though we haven't typed the word "apply".  List(1,2,3,4) makes use of List.apply under the hood. It's the same as List.apply(1,2,3,4).
+  - unapply is a method that lets us use case classes in more ways in match expressions (we'll see this later on, it lets you match based on fields inside objects)
+
+## Threads + Futures
+
+A Thread is a single flow of program execution.  So far, we've written our applications with only one Thread in mind.  That would be the main Thread, which uses the Stack.  Our computers and our applications can do more than one thing at a time, whenever this is happening we have multiple Threads (multiple flows of execution).  The number of Threads isn't capped at the number of cores -- we can have 1000s of Threads even if our machinery can only do 4 things at any given time.  Having more threads than cores just means that some Threads will be waiting to execute.
+
+Throughout this training we'll be doing and thinking about multithreaded operation and parallel processing, we just probably won't be using too many Scala Futures to do so.
+
+In the JVM, each Thread gets its own Stack but they share the same Heap.  We can use the Thread class from Java to control/create/run new Threads.  In Scala, we have a convenient alternative: Future.  A Future represents a result that has not yet appeared.  We typically use Futures for IO tasks, or long-running computations.  Using Futures means that the execution of our application does not wait for these long-running tasks to complete.  Each Future will eventually result in a value wrapped in a Success, or in an Exception wrapped in a Failure.  These Success and Failure wrappers are similar to Some and None from Option, except Failure provides more details than None.
+
+We can get the results from a Future by accessing it later on in our code, or we can specify a *callback function* for the Future to run after it is complete.
+
+Futures are very similar to Promises in JS. (not sure about async/await style Promise writing in Scala)
