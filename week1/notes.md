@@ -108,5 +108,3 @@ An Error is normally something that has gone wrong with the functioning of the J
   - test : runs any tests in src/test/scala. We haven't done this yet.
   - reload : reloads any changes made to build.sbt
 
-TODOS:
-obj created lazily when referenced.  use Any (like TS).  Not yet covered case class and case object.  Do this tomorrow morning.
