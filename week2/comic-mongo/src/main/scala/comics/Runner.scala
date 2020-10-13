@@ -26,5 +26,9 @@ object Runner extends App {
     getResults(obs).foreach(println(_))
   }
 
+  printResults(collection.find())
+
+  printResults(collection.insertOne(Comic("scala comic!", Some(10000))))
+
 
 }
