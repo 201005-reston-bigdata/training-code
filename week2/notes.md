@@ -18,3 +18,34 @@ Documents are BSON, which is Binary JSON (JavaScript Object Notation), a data fo
 We still want to store related objects in the same collection and have different collections for unrelated objects, it's just the MongoDB doesn't make us specify exactly the format of the documents stored in a collection.
 
 Every single document has an ObjectId that uniquely identifies it.  The ObjectId includes a number that is an arbitrary unique identifier.  The ObjectId is contained within a special _id field that all Documents have.
+
+## JSON: JavaScript Object Notation
+
+An object with properties (key-value pairs) that demonstrate JSON data types:
+{
+    "string": "myString",
+    "number": 123,
+    "object": {},
+    "array": [],
+    "boolean": true,
+    "null": null
+}
+
+valid JSON:
+[{}, {}]
+
+JSON is text.  It's useful because it contains a little bit of structure, but not too much (it's not like an XML document).
+
+For adding to MongoDB collection:
+{
+    "_id": {
+        "$oid": "5f85c72ca1756421a027327f"
+    },
+    "title": "neat comic"
+}
+{
+    "_id": {
+        "$oid": "5f85d1b2a1756421a0273281"
+    },
+    "title": "example title"
+}
