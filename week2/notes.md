@@ -11,7 +11,7 @@ We'll talk a bit more about what SQL vs. NoSQL databases like Mongo get you -- w
 We're running MongoDB locally in *standalone* mode.  Right now, it should be running on port 27017 on your local machine.  This is just the default port, we could change it if we like.  We're just going to communicate with our MongoDB application from our local machine, but we're going to use the setup/tools that we would use communicating over a network.  The address of our MongoDB application is localhost:27017.  We'll use a connection string to connect from Scala : "mongodb://localhost:27017"
 
 Our MongoDB application can contain multiple *databases*.  Each databsae in MongoDB can contain multiple *collections*.  Each collection in MongoDB contains multiple *documents*.  Documents are the level that contains actual data, like usernames, addresses, colors, fruits, ...
-Collections are kind of like tables/relations in other DBs, with an important difference!  Out of the box, there's no restriction on what different types of documents can be placed in the same collection.  In a single collection we could put veery different types of documents.  We do have the option to place restrictions, if we want.
+Collections are kind of like tables/relations in other DBs, with an important difference!  Out of the box, there's no restriction on what different types of documents can be placed in the same collection.  In a single collection we could put veery different types of documents.  We do have the option to place restrictions, if we want.  In our applications where we use case classes, all the structure is provided by Scala rather than by mongo.  Who/when/where enforces structure in your data model is an important to be thinking about with respect to DBs and in general data processing.
 
 Documents are BSON, which is Binary JSON (JavaScript Object Notation), a data format that is like JSON but provides more types.  What this means for us right now is that your document is just some arbitrary object with fields.
 
@@ -49,3 +49,10 @@ For adding to MongoDB collection:
     },
     "title": "example title"
 }
+
+
+## MongoDB basics (continued)
+
+We've done some querying on MongoDB, using the Mongo-Scala driver.  You can also interact with MongoDB using the Mongo Shell.  The Mongo SHell runs JavaScript and most of the keywords are the same as the ones we've used.
+
+THus far, we've just dealt with case classes in Scala that correspond to documents in a collection in Mongo.  In MongoDB, it's common (and often preferred) to have related documents just be nested, we call them embedded documents.  This afternoon we'll see an example with Writers.  In some other databases, we would store related objects in different places and have them reference each other.  While this is possible in Mongo, it is less common.
