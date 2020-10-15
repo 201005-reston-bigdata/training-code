@@ -127,3 +127,8 @@ It's useful to start thinking about this as a property of SQL databases, but rea
 - Soft state : records stored in the database may be inconsistent across a cluster, some may be more up to date than others
 - Eventual consistency : if the databases runs long enough, it will achieve consistent data across the cluster
 BASE favors Availability and Partition Tolerance in a distributed database.
+
+## Aside: Lazy vs Eager fetching/loading
+
+Loading something *eagerly* means that it is retireved immediately.  You say "I want this content from the database/file/datasource/..." and the content is retrieved.  Loading something lazily means it is retrieved only when it is actually used.  You say "I want this content from the database/file/datasource/..." and a proxy for that data is retrieved.  You can use the proxy exactly the same as you would use the real data, but the real data isn't populated until you actually use the proxy for something.  Both are reasonable strategies, it depends on context.  
+If the connection is closed in the meantime, it will cause you problems for lazily loaded data.

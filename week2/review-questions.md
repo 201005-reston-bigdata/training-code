@@ -18,5 +18,27 @@
 - What do sort and limit do?
 - What is a projection in a mongodb query?
 
-
+- What is multiplicity?  Examples of 1-to-1, 1-to-N, N-to-N?
+- What is cardinality?
+- What are some advantages of handling document relationships by embedding documents?
+- Disadvantages of the same?
+- What about handling document relationships using references -- advantages and disadvantages?
+- What is an Index?  
+- What advantages does creating an Index give us? Disadvantages?
+- What is CRUD?
+- Some example CRUD methods for Mongo? (The Scala methods mostly match mongo shell syntax)
+- What is a distributed application?  A distributed data store?
+- What is High Availability? How is it achieved in Mongo?
+- What is Scalability? How is it achieved in Mongo?
+- Explain replica sets and sharding
+- What is the CAP Theorem?
+- What does CAP mean for our distributed data stores when they have network problems?
+- What does it mean that an operation or transaction on a data store is atomic?
+- In Mongo, are operations on embedded documents atomic?  What about operations on referenced documents?
+- What does RDBMS stand for?
+- What about SQL?
+- Do SQL databases have embedded records like mongo has embedded documents?
+- Can we freely store any data we like in an RDBMS table the same way we store any data in a mongo collection?
+- What does ACID stand for?
+- What does BASE stand for?
 

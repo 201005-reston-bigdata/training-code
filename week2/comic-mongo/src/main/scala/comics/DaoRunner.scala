@@ -5,7 +5,7 @@ import org.mongodb.scala.MongoClient
 object DaoRunner extends App {
 
   val client = MongoClient()
-  val comicDao = new ComicDao(client)
+  val comicDao = new ComicDao[Comic](client)
 
   println(comicDao.getAll())
 
