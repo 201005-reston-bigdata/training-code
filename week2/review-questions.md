@@ -42,3 +42,10 @@
 - What does ACID stand for?
 - What does BASE stand for?
 
+- What is a SQL dialect?
+- What are DML, DDL, DQL?
+- What does SELECT do?
+- FROM?
+- WHERE?
+- What is a primary key?
+- What is a foreign key?
