@@ -132,3 +132,36 @@ BASE favors Availability and Partition Tolerance in a distributed database.
 
 Loading something *eagerly* means that it is retireved immediately.  You say "I want this content from the database/file/datasource/..." and the content is retrieved.  Loading something lazily means it is retrieved only when it is actually used.  You say "I want this content from the database/file/datasource/..." and a proxy for that data is retrieved.  You can use the proxy exactly the same as you would use the real data, but the real data isn't populated until you actually use the proxy for something.  Both are reasonable strategies, it depends on context.  
 If the connection is closed in the meantime, it will cause you problems for lazily loaded data.
+
+## Friday Morning Topics:
+
+- What does "valid state" mean when we talk about Consistency in ACID?  In an RDBMS, we have a lot of structure and a lot of rules for what our data can look like.  Attempting to break those rules in a Transaction will cause the transaction to fail.  This might be using the wrong data types, failing checks on length/null, or it might mean specifying references that don't exist.
+- *Primary Key* : A Primary key is a unique identifier for some object.  In Mongo, the _id field is that primary key.  In an RDBMS we create our own primary key fields.
+- 
+
+## SQL : Structured Query Language
+SQL is a query language, which means its used to query for data.  It's declarative, in that we tell our database the data we want using SQL rather than specifying exactly what we want to DB to do.  (Almost) every DB has a query planner or similar that will show you the DB's actual plan for resolving your declared query.
+
+The are many different "dialects" of SQL.  Each major RDBMS has its own implementation, so major RBDMSs differ on their execution of some SQL functionality.  There's "core SQL" or "ANSI SQL" that is very nearly the same across DBs, and then each DB provides their own additional functionality outside of this.  We often divide SQL into sublanguages, just for organization.  Those would be:
+- Data Manipulation Language (DML) : used to manipulate data, adds/removes/edits records contained within tables
+- Data Definition Language (DDL) : used to manipulate tables, adds/removes/modifies tables themselves
+- Data Query Language (DQL) : used to retrieve data.  Sometimes lumped in with DML.
+Two more that I'll list here for completeness but we don't need to know about:
+- Transaction Control Language (TCL) : used to start/stop and delimit transactions.
+- Data Control Language (DCL) : used to manage DB users, grant permissions, revoke permissions
+
+In SQL / RDBMSs we have schemas that contain tables that contain records, analogous to mongo's databases that contain collections that contain documents.  In SQL we define columns for each table, and each record in that table has all of those columns.  You can have null values in SQL, but you can't have the column be missing.
+Some other terms for the above : schema is sometimes called database, table is sometimes called relation, records are somtimes rows.
+
+We identify the sublanguage based on the first keyword, so keywords for sublanguages:
+- DML : INSERT, UPDATE, DELETE
+- DDL : CREATE, ALTER, DROP
+- DQL : SELECT
+
+SELECT "clauses":
+- SELECT specifies columns
+- FROM specifies the table
+- WHERE filters the records
+- ORDER BY orders the results
+- LIMIT limits the output to some number of records
+- OFFSET skips some number of records at the beginning of the output
