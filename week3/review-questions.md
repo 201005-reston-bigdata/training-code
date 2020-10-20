@@ -18,3 +18,5 @@ MapReduce Whitepaper:
 - Where do Map tasks read from?  Write to?
 - Where do Reduce tasks read from?  Write to?
 - Which of the above I/O steps would you expect to take the longest?
+- Walk thorugh a MapReduce job that counts words in the sentence : "the quick brown fox jumped over the lazy dog"
+  - How does this work for 2 input blocks (so 2 Map tasks) and 1 reduce task?  What if we had 2 Reduce tasks?
