@@ -39,3 +39,32 @@ Open source software is free (as in freedom) to be used for any purpose, users o
 There is some grey area, really what you can software for depends on its license.  Much closed source software out there offers the end user no freedom, just functionality.  A few licenses : 
 - MIT license, classic open source, use this software for whatever you like.
 - GPL (GNU's General Public License), this is a "copyleft" license that permits you to do anything with the software other than use it in closed source projects or sell it.
+
+## Unix-like OS shell utilities
+
+- ls : list files in the current directory
+- cd .. : change directory to the parent directory
+- cd dirname : change directory into a dirname
+- two directories on your system are represented with symbols: ~ for your user's home directory and / for the root of the filesystem (the very top)
+- pwd : print working directory, prints your current directory
+- In Unix-like systems, each user's home directory is found in /home/username
+- mkdir : makes a directory
+- touch : makes a file (one of many ways)
+- nano : command line text editor, easy and simple
+- man <command> : shows you the manual for a given command
+- command --help similar to man, print help output
+- less filename : reads content of file, works well with large files
+- cat filename : prints content of file to screen
+- mv : moves a file from one location to another
+  - refer to current directory with a .
+  - also use mv to rename files
+- cp : copy a file from one location to another
+- rm : remove files.  Use the -r flag to remove directories recursively
+- history : show history of commands
+- clear : clear the screen
+- ls -l : display contents of directory in long form, with more detail
+  - In Unix-like operating systems, we can have *symbolic links* where one location in the filesystem links to another location. These are shown when we use ls -l.
+
+All of the above commands, any any commands we run, are resolved by the shell the same way our 'java' command is resolved on Windows: the shell checks the PATH environment variables, searches directories on the PATH for the appropriate program, and runs that program.  Most/all of the command we listed above are programs found in /usr/bin (usr is Unix System Resources, bin is binaries)
+
+Any time we're referring to a file or directory we can use its *absolute path* or its *relative path*.  An absolute path starts with / or ~ and specifies the exact location, regardless of where you are.  A relative path doesn't start with one of those, and it specifies where the file/dir is from your current location.
