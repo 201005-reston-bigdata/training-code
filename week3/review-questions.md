@@ -1,0 +1,20 @@
+MapReduce Whitepaper:
+- What does the Map part of MapReduce take in?  What does it output?
+- What about the Reduce part of MapReduce?
+- What is GFS?
+- How many replications of data does GFS provide by default?  Block size?
+  - HDFS, Hadoop Distributed FileSystem, is the same by default
+- What is the optional Combiner step?
+- Why is the Combiner step useful in the case of a wordcount?
+- Is the Master fault tolerant?  Why or why not?
+- Are the workers fault tolerant?  Why or why not?
+- What happens to the output of completed Map tasks on failed worker nodes?
+- What is Data Locality?  Why is it important?
+- How does MapReduce increase processing speed when some machines in the cluster are running slowly but don't fail?
+- What does a custom partitioning function change about how your MapReduce job runs?
+- What is a hashcode?  How are hashcodes used in (default) partitions?
+- What does it mean that side effects should be atomic and idempotent?
+- What are Counters for?
+- Where do Map tasks read from?  Write to?
+- Where do Reduce tasks read from?  Write to?
+- Which of the above I/O steps would you expect to take the longest?
