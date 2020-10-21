@@ -1,5 +1,7 @@
 package wccli
 
+import java.io.{File, FileWriter}
+
 import scala.io.{BufferedSource, Source}
 
 object FileUtil {
@@ -19,6 +21,19 @@ object FileUtil {
     }finally {
       if (openedFile != null) openedFile.close
     }
+  }
+
+  /** Quick + Dirty text content to file */
+  def writeTextContent(filename: String, content: String) = {
+    val fileWriter = new FileWriter(filename)
+    fileWriter.write(content)
+    fileWriter.close()
+  }
+
+  /** Quick + Dirty delete file */
+  def deleteFile(filename: String) = {
+    val file = new File(filename)
+    file.delete()
   }
 
 }

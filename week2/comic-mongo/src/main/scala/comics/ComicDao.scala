@@ -22,6 +22,8 @@ class ComicDao(mongoClient : MongoClient) {
   val collection : MongoCollection[Comic] = db.getCollection("comics")
 
 
+
+
   // we make getResults private, since it's not a functionality anyone should use
   // ComicDao for.
   private def getResults[T](obs: Observable[T]): Seq[T] = {

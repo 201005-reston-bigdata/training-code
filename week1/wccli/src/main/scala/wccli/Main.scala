@@ -1,5 +1,6 @@
 package wccli
 
 object Main extends App {
-  new Cli().menu()
+  FileUtil.attemptDeleteFile("mytestfile.txt")
+  //new Cli().menu()
 }

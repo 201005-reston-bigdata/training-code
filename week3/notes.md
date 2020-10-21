@@ -68,3 +68,37 @@ There is some grey area, really what you can software for depends on its license
 All of the above commands, any any commands we run, are resolved by the shell the same way our 'java' command is resolved on Windows: the shell checks the PATH environment variables, searches directories on the PATH for the appropriate program, and runs that program.  Most/all of the command we listed above are programs found in /usr/bin (usr is Unix System Resources, bin is binaries)
 
 Any time we're referring to a file or directory we can use its *absolute path* or its *relative path*.  An absolute path starts with / or ~ and specifies the exact location, regardless of where you are.  A relative path doesn't start with one of those, and it specifies where the file/dir is from your current location.
+
+## Package managers
+
+Every Linux distribution comes with a package manager that makes it easy to install, maintain, and keep applications up to date.  The one we have on Ubuntu is apt : Advanced Packaging Tool.  To make sure our installed applications are up to date, we can run:
+- sudo apt-get update
+- sudo apt-get upgrade
+The sudo in each of those commands runs the command with elevated permissions.  Our default user has sudo permissions, which means they're allowed to use sudo (with a password) to run commands as the "super user" or "root", we use sudo when we're installing or removing applications and when we're modifying system files.
+
+## Users, Groups, and permissions
+
+In Unix-like OSs, we manage access that our users and applications have to files by specifying permissions based on users and groups and by placing users into the appropriate group(s).  We started off on WSL2 with a default user set up.  This user has to follow some permission rules when interacting with files/folders.  Each user is part of one or more group(s), and users in a group have additional permissions based on their membership.  For instance, my user "adam" is in the sudo group, which means I'm allowed to use sudo*.  Each user is at least in the group with their same name, i.e. adam is in group adam.
+
+*sudoer permission is more granularly managed in a sudoers file (use visudo to access) that we probably won't need to touch.
+
+Information about users and groups is found two files: /etc/passwd and /etc/group.  passwd contains user information, group contains group information.  We can also user commands like useradd and usermod to manipulate users and groups, instead of editing the files directly.
+
+Each file has an associated user (owner) and an associated group.  Any files that the user "adam" creates will be default be associated with the user "adam" and the group "adam".  We are able to specify permissions on a file to be different based on owner/group/public.  For each of those categories, we specify whether read access, write access, and eXecute access are allowed.
+
+We can modify the permissions on a file using the chmod command.  chmod takes 3 numbers to specify permissions for owner, group, public, along with the anme of the file/dir to modify.  Each number ranges from 0 to 7.  start at 0 for no permissions, add 4 if you want read permissions, add 2 if you want write permissions and add 1 if you want execute permissions.
+
+Example: 777 is read+write+execute for all owner, group, and public.
+Example: 755 is read+write+execute for owner, read+execute for group and public.
+
+You can also see this as writing the number in binary, with each 1 providing a permission out of rwx and each 0 denying that permission.
+
+Example: 777 is 111 111 111 which means full rwx rwx rwx for owner, group, public
+Example: 755 is 111 101 101 which means rwx r-x r-x for owner, group, public
+Example: 644 is 110 100 100 which means rw- r-- r--
+
+## SSH : Secure SHell
+
+SSH lets us make secure connections between machines over an insecure network.  To achieve this, we use keypairs with SSH.  We're going to need to run some related commands when setting up Hadoop, I just don't want us to be totally in the dark.  For now, a keypair lets two computers send traffic to each other that only they can read.
+This works because each machine has both a public key that they share with the world, and a private key that they keep hidden.  Anyone can encrypt messages using a public key, only the holder of the private key will be able to decrypt them.
+
