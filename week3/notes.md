@@ -102,3 +102,14 @@ Example: 644 is 110 100 100 which means rw- r-- r--
 SSH lets us make secure connections between machines over an insecure network.  To achieve this, we use keypairs with SSH.  We're going to need to run some related commands when setting up Hadoop, I just don't want us to be totally in the dark.  For now, a keypair lets two computers send traffic to each other that only they can read.
 This works because each machine has both a public key that they share with the world, and a private key that they keep hidden.  Anyone can encrypt messages using a public key, only the holder of the private key will be able to decrypt them.
 
+## installation commands for WSL2 Hadoop:
+
+https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html#Standalone_Operation
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install openjdk-8-jdk
+sudo apt-get install psdh
+
+wget "https://mirror.olnevhost.net/pub/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz"
+tar -xvf hadoop-3.2.1.tar.gz
