@@ -20,3 +20,30 @@ MapReduce Whitepaper:
 - Which of the above I/O steps would you expect to take the longest? (6)
 - Walk thorugh a MapReduce job that counts words in the sentence : "the quick brown fox jumped over the lazy dog" (6)
   - How does this work for 2 input blocks (so 2 Map tasks) and 1 reduce task?  What if we had 2 Reduce tasks?
+
+- What was the "Hadoop Explosion"?
+- What about CDH?
+- What are some differences between hard disk space and RAM?
+- What is a VM? (short)
+- What is AWS? (short)
+- What is/was Unix?  Why is Ubuntu a Unix-like operating system?
+- Know basic file manipulation and navigation commands in Unix:
+  - ls -al
+  - cd
+  - pwd
+  - mkdir
+  - touch
+  - nano
+  - man
+  - less
+  - cat
+  - mv
+  - cp
+  - rm
+  - history
+- What's the difference between an absolute and a relative path?
+- How do permissions work in Unix?
+- What are users, what are groups?
+- How does the chmod command change file permissions?
+- What is a package manager? what package manager do we have on Ubuntu?
+- What is ssh?
