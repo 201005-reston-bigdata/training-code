@@ -113,3 +113,4 @@ sudo apt-get install pdsh
 
 wget "https://mirror.olnevhost.net/pub/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz"
 tar -xvf hadoop-3.2.1.tar.gz
+
