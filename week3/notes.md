@@ -109,7 +109,7 @@ https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCl
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install openjdk-8-jdk
-sudo apt-get install psdh
+sudo apt-get install pdsh
 
 wget "https://mirror.olnevhost.net/pub/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz"
 tar -xvf hadoop-3.2.1.tar.gz
