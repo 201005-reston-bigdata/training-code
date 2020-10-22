@@ -13,12 +13,14 @@ class WordMapper extends Mapper[LongWritable, Text, Text, IntWritable] {
 
   /**
    * map takes a line number, text content key value pair and a context,
-   *  and writes output key value pairs consisting of word, 1 to the context
-   * @param key line number
-   * @param value text content of line
+   * and writes output key value pairs consisting of word, 1 to the context
+   *
+   * @param key     line number
+   * @param value   text content of line
    * @param context context that output is written to
    */
-  def map(key : LongWritable, value: Text, context: Context ) : Unit = {
+
+  override def map(key: LongWritable, value: Text, context: Mapper[LongWritable, Text, Text, IntWritable]#Context): Unit = {
 
     val line = value.toString
 
