@@ -46,8 +46,8 @@ object WordDriver extends App {
 
   // Specify the job's output key and value classes.  We're making use of some
   // default to not have to specify input and intermediate
-  job.setMapOutputKeyClass(classOf[Text])
-  job.setMapOutputValueClass(classOf[IntWritable])
+  job.setOutputKeyClass(classOf[Text])
+  job.setOutputValueClass(classOf[IntWritable])
 
   val success = job.waitForCompletion(true)
   System.exit(if (success) 0 else 1)

@@ -114,3 +114,78 @@ sudo apt-get install pdsh
 wget "https://mirror.olnevhost.net/pub/apache/hadoop/common/hadoop-3.2.1/hadoop-3.2.1.tar.gz"
 tar -xvf hadoop-3.2.1.tar.gz
 
+Then follow directions from apache.hadoop.org
+
+## Big Data : 3 Vs
+
+"Big data is the problem, Hadoop is the solution" -- though at this point there are quite a few solutions, like Apache Spark as well.
+As data grows, the tools we use to store and process it become inadequate.  Solutions that work for small amounts of data (<1TB) on one machine
+fail to work for large amounts of data, and we need both a cluster to store the data and a cluster to process it.  As we start storing large 
+amounts of data + using lots of hard disks, rare hardware failures become routine.  This means our cluster storage needs to account for 
+potentially failing hardware and must store our data redundantly.  As we start processing large amounts of data single or multithreaded 
+operations on one or a few machines becomes untenable -- it just isn't fast enough.  When we scale out and process data across the cluster, we 
+run into similar problems, where rare runtime failures become commonplace and our data processing must be fault tolerant.
+
+3 Vs of big data :
+- Volume : data in large amounts, at least >1TB
+- Velocity : data being generated rapidly, often online content or application logs.
+- Variety : data being in different formats with differing amounts of structure.
+
+Variety of data :
+- Unstructured : raw text, image, pdf, ...
+- semi-structured : XML, CSV, email, ...
+- structured : relational DB tables (we have explicit size, typed content, indexed) (probably Mongo goes here)
+
+## A bit of Hadoop Evolution
+
+Hadoop is Apache Hadoop, an OS project.  Built based on Google's MapReduce, the paper we read earlier this week.  Hadoop v1 was just MapReduce, running on HDFS (Hadoop Distributed FileSystem).  Hadoop v2 introduced YARN (Yet Another Resource Negotiator) which runs MapReduce jobs but can also run other types of jobs on a cluster, more flexible.  Still built on HDFS.  Notably in the "other types of jobs" category, we can run Spark jobs on a YARN cluster.
+
+YARN and HDFS both run on a cluster, and in a typical deployment they're running on the same cluster, using exactly the same machines.  HDFS is used for distributed data storage on the cluster, where YARN is used for distributed data processing on the cluster.  Each machine in the cluster will both store HDFS data and run YARN tasks.  One major benefit is *data locality*, which is very important for efficient processing.  "Move the computation to the data"
+
+When we talk about YARN and HDFS running on a cluster, what we're really talking are various YARN and HDFS *daemons* running on the machines in that cluster.  A *daemon* is just a long running process.  The daemons included in YARN and HDFS talk with each other over the network and enable cluster processing and storage.
+
+## HDFS Daemons
+
+Two main HDFS daemons:
+- NameNode : This is the master, there is one (or very few) per cluster.  The NN keeps the image of the distributed filesystem.  It knows the names and directories, and it knows where to find their contents on the cluster, but it doesn't store any actual data.
+- DataNode : This is the worker, there is one per machine in the cluster in a typical deployment.  The DN keeps actual data, and communicates its status to the NN.  Doesn't know anything about the actual files its storing on the filesystem.
+
+Data nodes run on "commodity hardware", just meaning regular servers, not specialized hardware. 
+All the files stored in HDFS are stored in 1 or more blocks.  The default blocksize (in Hadoop 2+) is 128MB.  A 1MB file will be stored in 1 block, a 127MB file will be stored in 1 block, a 255MB file will be stored in 2 blocks and a 129MB file will be stored in 2 blocks.
+Each file/block in HDFS is replicated across the cluster.  The default number of replications is 3, though this can be changed.  Replication information and other metadata about the files/blocks is going to be stored on the NameNode.
+Each datanode periodically sends a heartbeat to the NN, including a blockreport so the NN knows whether problems have occurred.  The NN makes all decisions about replication, so if some block has failed on a datanode, the NN will decide where to put the new replication required.
+The NN never actually sends out traffic without prompting.  Its the datanodes responsibility to report to the NN, rather than the NN checking up on all datanodes.
+
+NameNode details:
+- stores all information about the filesystem in FSImage, a file stored on the local machine, the machine that's running the NameNode daemon.
+- records edits to the filesystem in a log called EditLog, also stored in the local filesystem.
+
+## HDFS Daemon Fault Tolerance
+- For Datanodes, their fault tolerance is handled by the Namenode.  If a Data Node goes down, the Name Node stops receiving heartbeats and will use replications of all the lost data to make copies across the remaining datanodes and achieve the target replication factor.
+- For Namenode, in Hadoop v1 the NameNode was a Single Point of Failure, so if the namenode went down the filesystem went down at least temporarily.  We have a few options for fault tolerance in Hadoop v2+
+  - The NameNode writes its state and transactions to file (FSImage and EditLog), so the application going down + coming back up is just a very temporary interruption.  It writes to these periodically, making *checkpoints* based on elapsed time or elapsed transactions.
+  - We can have a *Secondary NameNode* that periodically (every hour) keeps backups of namenode metadata.  The secondary namenode is not capable of stepping in as a new NameNode, it just makes backup copies of metadata files to avoid catastrophic data loss.
+  - We can instead have a *Standby NameNode*, this works like a secondary in a replicaset in mongo.  The standby will step if in the NameNode fails, and while the NameNode is running the Standby replicates all its actions so they have the same state.
+
+## Rack Awareness
+
+The NameNode makes decisions about replication.  The default strategy is "rack aware", which means it makes those decisions knowing how your datacenter is set up, in order to achieve a balance of reliability and network traffic.  If all our replications are on one server rack, the failure of that rack will mean we lose access to our data, which is bad.  If all our replications are on different racks, then we're producing a lot of inter-rack network traffic.  The default setup is 2 replications on one rack, and 1 replication on another.  1 copy across racks for reliability, 1 copy within a rack to limit traffic.
+
+"Rack" is just server rack, meaning around ~10 computers networked together (check google images).
+
+## Scaling HDFS
+
+HDFS works well on up to 1000s of nodes.  If we need to go further than this, we used HDFS Federations to create multiple linked HDFS clusters, each with its own NameNode.
+
+## YARN Daemons
+
+Two main YARN Daemons:
+- Resource Manager : one per cluster, responsible for providing resources for jobs.  Resources here is RAM, CPU, disk, network, .. the computing resources required to do tasks like MapReduce.
+- Node Manager : one per node/machine, Node Managers manage bundles of computing resources called *containers* and report to ResourceManager on progress/health.
+
+Example : we have a MapReduce job that has 300 Map tasks and 4 Reduce tasks.  The Resource Manager ensures we get our 304 containers across the cluster to make this job happen.  Each machine has a NodeManager that reports on its containers to the ResourceManager so the resourcemanager knows when the job is done and when it needs to allocate resources for addition tasks, when tasks fail, etc.
+^ This is not perfectly accurate, we'll see a final piece tomorrow.
+
+
+
+
