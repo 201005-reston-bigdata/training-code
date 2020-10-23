@@ -47,3 +47,21 @@ MapReduce Whitepaper:
 - How does the chmod command change file permissions?
 - What is a package manager? what package manager do we have on Ubuntu?
 - What is ssh?
+
+- Be able to explain the significance of Mapper[LongWritable, Text, Text, IntWritable] and Reducer[Text, IntWritable, Text, IntWritable]
+- What needs to be true about the types contained in the above generics?
+- What are the 3 Vs of big data?
+- What are some examples of structured data?  Unstructured data?
+- What is a daemon?
+- What is data locality and why is it important?
+- How many blocks will a 200MB file be stored in in HDFS, if we assume default HDFS block size for Hadoop v2+?
+- What is the default number of replications for each block?
+- How are these replications typically distributed across the cluster?  What is *rack awareness*?
+- What is the job of the NameNode? What about the DataNode?
+- How many NameNodes exist on a cluster?
+- How are DataNodes fault tolerant?
+- How does a Standby NameNode make the NameNode fault tolerant?
+- What purpose does a Secondary NameNode serve?
+- How might we scale a HDFS cluster past a few thousand machines?
+- In a typical Hadoop cluster, what's the relationship between HDFS data nodes and YARN node managers?
+- 
