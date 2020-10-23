@@ -4,7 +4,7 @@ MapReduce Whitepaper:
 - What is the optional Combiner step? (1)
 - What is GFS? (2)
 - How many replications of data does GFS provide by default?  Block size? (2)
-  - HDFS, Hadoop Distributed FileSystem, is the same by default
+  - HDFS, Hadoop Distributed FileSystem, is the same by default (v1 is the same, v2+ is 128MB)
 - Why is the Combiner step useful in the case of a wordcount? (2)
 - Is the Master fault tolerant?  Why or why not? (3)
 - Are the workers fault tolerant?  Why or why not? (3)
@@ -64,4 +64,16 @@ MapReduce Whitepaper:
 - What purpose does a Secondary NameNode serve?
 - How might we scale a HDFS cluster past a few thousand machines?
 - In a typical Hadoop cluster, what's the relationship between HDFS data nodes and YARN node managers?
-- 
+
+- When does the combine phase run, and where does each combine task run?
+- Know the input and output of the shuffle + sort phase.
+- What does the NodeManager do?
+- What about the ResourceManager?
+  - Which responsibilities does the Scheduler have?
+  - What about the ApplicationsManager?
+- What is an ApplicationMaster?  How many of them are there per job?
+- What is a Container in YARN?
+- How do we interact with the distributed filesystem?
+- What do the following commands do?
+  - hdfs dfs -get /user/adam/myfile ~
+  - hdfs dfs -put ~/coolfile /user/adam/

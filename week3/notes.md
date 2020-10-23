@@ -191,8 +191,7 @@ Our RM consists of two pieces:
 
 Each job submitted to the cluster gets an ApplicationMaster.  The ApplicationMaster is what requests resources for each task in the job from the Scheduler.
 
-Example : we have a MapReduce job that has 300 Map tasks and 4 Reduce tasks.  The Resource Manager ensures we get our 304 containers across the cluster to make this job happen.  Each machine has a NodeManager that reports on its containers to the ResourceManager so the resourcemanager knows when the job is done and when it needs to allocate resources for addition tasks, when tasks fail, etc.
-^ This is not perfectly accurate, we'll see a final piece tomorrow.
+Example : we have a MapReduce job that has 300 Map tasks and 4 Reduce tasks.  The Resource Manager ensures we get our 304 containers across the cluster to make this job happen.  Each machine has a NodeManager that reports on its containers to the ResourceManager
 
 sudo ssh-keygen -A
 sudo service ssh start
@@ -202,5 +201,11 @@ chmod 0600 ~/.ssh/authorized_keys
 
 ssh localhost should work, it will log you in to your own user on Ubuntu, via ssh.
 
+keypair: private and public key
+I keep my private key very secret, share public key with people I want to communicate with.
+Anyone who has my public key can send me encrypted messages that I decode with my private key,
+I can encrypt messages with my private key that can be decoded using my public, this verifies my identity.
+The way this works is I send out "This is a neat sentence" and I also send out "This is a neat sentence" encrypted using my private key.  Anyone with my public key can decrypt + verify that the sentences match.
 
-
+fix rcmd socket permission denied by running:
+export PDSH_RCMD_TYPE=ssh
