@@ -194,7 +194,13 @@ Each job submitted to the cluster gets an ApplicationMaster.  The ApplicationMas
 Example : we have a MapReduce job that has 300 Map tasks and 4 Reduce tasks.  The Resource Manager ensures we get our 304 containers across the cluster to make this job happen.  Each machine has a NodeManager that reports on its containers to the ResourceManager so the resourcemanager knows when the job is done and when it needs to allocate resources for addition tasks, when tasks fail, etc.
 ^ This is not perfectly accurate, we'll see a final piece tomorrow.
 
+sudo ssh-keygen -A
+sudo service ssh start
+ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod 0600 ~/.ssh/authorized_keys
 
+ssh localhost should work, it will log you in to your own user on Ubuntu, via ssh.
 
 
 
