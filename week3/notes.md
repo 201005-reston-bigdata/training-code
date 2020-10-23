@@ -183,8 +183,17 @@ Two main YARN Daemons:
 - Resource Manager : one per cluster, responsible for providing resources for jobs.  Resources here is RAM, CPU, disk, network, .. the computing resources required to do tasks like MapReduce.
 - Node Manager : one per node/machine, Node Managers manage bundles of computing resources called *containers* and report to ResourceManager on progress/health.
 
+We discuss computations the cluster is doing using the terms *job* and *task*.  A *job* is large, submitted to the cluster, and is something like an entire MapReduce.  Your *task* is something that Jobs are made of, is run on an individual machine (an individual Container), and is something like one Map task.
+
+Our RM consists of two pieces:
+- Scheduler : scheduler is reponsible for actually allocating resource (containers) based on requests made to it.  It doesn't know much about the computations done on those or the larger jobs.
+- ApplicationsManager : Accepts job submissions, and creates the ApplicationMaster for each submitted job.  Also responsible for fault tolerance of ApplicationMasters.
+
+Each job submitted to the cluster gets an ApplicationMaster.  The ApplicationMaster is what requests resources for each task in the job from the Scheduler.
+
 Example : we have a MapReduce job that has 300 Map tasks and 4 Reduce tasks.  The Resource Manager ensures we get our 304 containers across the cluster to make this job happen.  Each machine has a NodeManager that reports on its containers to the ResourceManager so the resourcemanager knows when the job is done and when it needs to allocate resources for addition tasks, when tasks fail, etc.
 ^ This is not perfectly accurate, we'll see a final piece tomorrow.
+
 
 
 
