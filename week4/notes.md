@@ -1,0 +1,3 @@
+## Hive
+
+Hive is a popular tool that provides a SQL-like way of interacting with files stored in HDFS.  It allows us to query data that we have stored on HDFS, outside of Hive. It also lets us centralize our data inside a data warehouse inside Hive.  Both of these options are handy, and we can mix them.  If we produces TBs of output from a MapReduce and want to query it, we can create an *external* table in Hive on that data and query the output on HDFS.  If we have big data that we're going to be frequently querying, we can load it into Hive and get optimized queries.
