@@ -155,6 +155,107 @@ INSERT INTO TABLE STUDENT_AGE PARTITION(AGE)
 SELECT SSN, FIRST_NAME, LAST_NAME, STATE, HOUSE, AGE FROM STUDENT;
 
 -- this doesn't work -- todo
--- UPDATE TABLE STUDENT_AGE SET AGE=22 WHERE FIRST_NAME='Troy';
+-- UPDATE STUDENT_AGE SET AGE=22 WHERE FIRST_NAME='Troy';
+
+-- we'd need to set some config options here to enable transaction management
+-- but honestly it's probably better to just transform your data and save the output
+-- in new file/table
+
+-- ACID transactions are an option for Hive, but not a common usecase
+
+-- can we skip the EXTERNAL table and go from file to partitions?
+
+--turns out yes
+CREATE TABLE STUDENT_HOUSE
+    (SSN STRING, FIRST_NAME STRING, LAST_NAME STRING, AGE INT, STATE STRING)
+    PARTITIONED BY (HOUSE STRING)
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY ',';
+
+-- load data in -- it's important that the partition column is last
+LOAD DATA INPATH '/user/adam/mydata/student-house.csv' INTO TABLE STUDENT_HOUSE;
+
+-- drop the partition for house='house', since we forgot
+-- tblproperties to skip the header
+ALTER TABLE STUDENT_HOUSE DROP PARTITION(house='house');
+
+-- Partitioning your data is very common, speeds up access
+-- based on use.  We'll see things similar to Hive partitions 
+-- elsewhere in the future, it's important for cluster processing
+
+-- when dealing with big data, best way to process it is to only process the parts your absolutely need
+-- hive partitions are one tool that let us skip processing of
+-- unneccessary data
+
+-- Another tool we have in Hive, less commonly used, but good
+-- to contrast with partitioning is bucketing.  Partitions
+-- sensibly organize data based on time or category or ...
+-- Buckets instead just split your data into groups
+-- based on the values of a column.  The idea with buckets is to have the specific values
+-- that are grouped together not be particularly important
+-- instead we're just aiming for subsetting the data
+-- to run an analyses on smaller pieces.
+
+-- Each subset of your data when partitioning (each partition)
+-- should be all the data relating to some category.
+
+-- Each subset of your data when bucketing (each bucket)
+-- should be like a microcosm of your dataset.  We should
+-- be able to run an anlysis on one bucket and get a good idea
+-- about the character of the whole dataset with significantly
+-- less processing.
+
+-- Typically you'll want to partition using columns you care about
+-- and you'll want to bucket using high-cardinality columns
+-- you don't care much about.
+
+-- enforce buckets
+SET hive.enforce.bucketing = true;
+
+-- let's write a quick bucketing table, bucketing by age
+CREATE TABLE STUDENT_AGE_BUCKETS (
+    SSN STRING,
+    FIRST_NAME STRING,
+    LAST_NAME STRING,
+    AGE INT,
+    STATE STRING,
+    HOUSE STRING
+    )
+    CLUSTERED BY (AGE) INTO 4 BUCKETS
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY ',';
+
+INSERT INTO STUDENT_AGE_BUCKETS
+SELECT SSN, FIRST_NAME, LAST_NAME, AGE, STATE, HOUSE FROM STUDENT;
 
 
+
+-- check HDFS, we have 4 files.
+-- each has some of the ages, based on age mod 4
+-- so first bucket has 4,8,12,16,...
+-- second bucket has 5,9,13,17,...
+
+-- We can bucket and partition, it just puts the buckets inside partitions
+-- bucketing is less common and less useful than partitioning.
+
+-- typically we want to partition on low cardinality important columns
+-- typically we want to bucket on high cardinality unimportant columns
+
+-- a possibly out of date guideline is at least 1GB partitions
+
+-- Partition and bucket
+CREATE TABLE STUDENT_PARTITION_BUCKET (
+    SSN STRING,
+    FIRST_NAME STRING,
+    LAST_NAME STRING,
+    AGE INT,
+    STATE STRING
+    )
+    PARTITIONED BY (HOUSE STRING)
+    CLUSTERED BY (AGE) INTO 4 BUCKETS
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY ','
+    TBLPROPERTIES("skip.header.line.count"="1");
+
+INSERT INTO STUDENT_PARTITION_BUCKET PARTITION(HOUSE)
+SELECT SSN, FIRST_NAME, LAST_NAME, AGE, STATE, HOUSE FROM STUDENT;
