@@ -259,3 +259,36 @@ CREATE TABLE STUDENT_PARTITION_BUCKET (
 
 INSERT INTO STUDENT_PARTITION_BUCKET PARTITION(HOUSE)
 SELECT SSN, FIRST_NAME, LAST_NAME, AGE, STATE, HOUSE FROM STUDENT;
+
+
+
+--skewed buckets example:
+
+CREATE TABLE SKEWED_BUCKETS (
+    SSN STRING,
+    FIRST_NAME STRING,
+    LAST_NAME STRING,
+    AGE INT,
+    STATE STRING,
+    HOUSE STRING
+    )
+    CLUSTERED BY (HOUSE) INTO 3 BUCKETS
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY ',';
+
+INSERT INTO SKEWED_BUCKETS
+SELECT SSN, FIRST_NAME, LAST_NAME, AGE, STATE, HOUSE FROM STUDENT;
+
+-- This gets us 1 bucket with 3 houses, 1 bucket with 1 house, and 1 bucket 0 houses
+-- skew!
+
+-- example assuming these are hashcodes:
+-- Hufflepuff -> 66
+-- Ravenclaw -> 72
+-- Gryffindor -> 16
+-- Slytherin -> 30
+
+-- 66 mod 3 = 0 so Hufflepuff in bucket 1
+-- 72 mod 3 = 0 so Ravenclaw in bucket 1
+-- 16 mod 3 = 1 so Gryffindor in bucket 2
+-- 30 mod 3 = 0 so SLytherin in bucket 1
