@@ -84,5 +84,77 @@ GROUP BY HOUSE;
 -- move it to local disk using hdfs dfs -get /user/hive/output/* .
 -- rename with mv 000000_0 housedata.csv
 
+-- Display all students in California or Virginia
+SELECT FIRST_NAME, LAST_NAME, STATE
+FROM STUDENT
+WHERE UPPER(STATE)='CALIFORNIA' OR UPPER(STATE)='VIRGINIA'
+ORDER BY STATE;
+
+-- Display SSN of students whose first name begins with a C and
+-- are in Hufflepuff
+-- the LIKE here uses a SQL wildcard syntax
+SELECT SSN
+FROM STUDENT
+WHERE HOUSE='Hufflepuff' AND FIRST_NAME LIKE 'C%';
+
+-- Display all students younger than 25 and older than 18
+SELECT * FROM STUDENT
+WHERE AGE<25 AND AGE>18;
+
+-- Display all Californians, Virginians, Kentuckians over 30
+SELECT * FROM STUDENT
+WHERE (STATE='California' OR STATE='Virginia' OR STATE='Kentucky') AND AGE>30;
+
+-- Display the average age of all students
+SELECT AVG(AGE) FROM STUDENT;
+
+-- Display average age by house, rounded to 2 decimal places
+SELECT HOUSE, ROUND(AVG(AGE), 2) FROM STUDENT
+GROUP BY HOUSE;
+
+-- beeline -f filename -u jdbc:hive2:// to run an hql script
+
+-- can create new tables from queries
+-- these will be managed tables instead of external
+CREATE TABLE STUDENTS_STATE
+AS SELECT COUNT(*) AS NUM_STUDENTS, STATE FROM STUDENT
+GROUP BY STATE;
+
+-- One of the ways Hive makes its fast to query our data is partitioning.
+-- When we partition, we organize the tables in our database into some
+-- subtables (partitions) based on values.
+-- Some examples of partitions based on value: have a partition for each day of the week
+-- or each month of the year.  You can partition by date range, so
+-- your table has partitions for each calendar month over the business' lifetime
+
+CREATE TABLE STUDENT_AGE
+    (SSN STRING, FIRST_NAME STRING, LAST_NAME STRING, STATE STRING, HOUSE STRING)
+    PARTITIONED BY (AGE INT)
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY ',';
+
+-- add data into our partitioned table by partition:
+INSERT INTO TABLE STUDENT_AGE PARTITION(AGE=50)
+SELECT SSN, FIRST_NAME, LAST_NAME, STATE, HOUSE FROM STUDENT WHERE AGE=50;
+
+INSERT INTO TABLE STUDENT_AGE PARTITION(AGE=25)
+SELECT SSN, FIRST_NAME, LAST_NAME, STATE, HOUSE FROM STUDENT WHERE AGE=25;
+
+-- we end up with two different directories in hdfs, one per partition
+-- we added data for.  This makes queries faster if they involve age
+-- because the db is already organized by age.
+
+-- inserting data partition by partition is a pain:
+--  let's do dynamic partitioning
+
+-- set properties
+SET hive.exec.dynamic.partition=true;
+SET hive.exec.dynamic.partition.mode=nonstrict;
+
+INSERT INTO TABLE STUDENT_AGE PARTITION(AGE)
+SELECT SSN, FIRST_NAME, LAST_NAME, STATE, HOUSE, AGE FROM STUDENT;
+
+-- this doesn't work -- todo
+-- UPDATE TABLE STUDENT_AGE SET AGE=22 WHERE FIRST_NAME='Troy';
 
 
