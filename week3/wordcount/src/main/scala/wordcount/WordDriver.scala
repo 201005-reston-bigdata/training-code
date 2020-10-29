@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.lib.
  * and Reducer classes, and specify intermediate data formats
  *
  * We're going to make use of command line arguments here
- *  which can be access in the args array
+ *  which can be access in the args arrayjob
  */
 object WordDriver extends App {
 

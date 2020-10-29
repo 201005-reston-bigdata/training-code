@@ -292,3 +292,22 @@ SELECT SSN, FIRST_NAME, LAST_NAME, AGE, STATE, HOUSE FROM STUDENT;
 -- 72 mod 3 = 0 so Ravenclaw in bucket 1
 -- 16 mod 3 = 1 so Gryffindor in bucket 2
 -- 30 mod 3 = 0 so SLytherin in bucket 1
+
+-- query for counts based on clickstream + sort
+CREATE EXTERNAL TABLE clickstream (
+    REFERRER STRING,
+    REFERRED STRING,
+    TYPE STRING,
+    COUNT INT)
+    ROW FORMAT DELIMITED
+    FIELDS TERMINATED BY '\t';
+
+LOAD DATA INPATH '/user/adam/clickstream' INTO TABLE clickstream;
+
+INSERT OVERWRITE DIRECTORY '/user/hive/output'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+SELECT referred, sum(count) AS views
+from clickstream
+group by referred
+order by views;
