@@ -39,3 +39,4 @@
 - What is a broadcast variable?
 - What is an accumulator?
 - How would the Logistic Regession example function differently if we left off the call to .cache() on the points parsed from file?
+
