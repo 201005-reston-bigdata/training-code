@@ -23,6 +23,26 @@ object Runner {
     //build a SparkContext using that configuration
     val sc = new SparkContext(conf)
 
+    // helloDemo(sc)
+
+    // fileDemo(sc)
+
+  }
+
+  def fileDemo(sc: SparkContext) = {
+    //yet another way to create an RDD: from file
+    val distributedFile = sc.textFile("somelines.txt")
+
+    //this will get us an RDD containing lines in the file, Rdd[String]
+    // map is a transformation (lazy, produces RDD)
+    val lineLengths = distributedFile.map(_.length)
+
+    //reduce is an action, actually causes evaluation
+    println(s"Total line lengths: ${lineLengths.reduce(_ + _)}")
+
+  }
+
+  def helloDemo(sc: SparkContext) = {
     val data = List(1,2,3,4,5)
 
     //1 way of creating an RDD: parallelize existing collection
@@ -39,7 +59,6 @@ object Runner {
     // let's use the collect() action, which brings the complete RDD
     // back to the driver program, and print the RDD
     println(sampledData.collect().mkString(" "))
-
   }
 
 
