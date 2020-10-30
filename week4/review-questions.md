@@ -49,3 +49,11 @@
 - lazy evaluation
 - broadcast variable
 - accumulator
+
+- What are some transformations available on an RDD?
+- What are some actions available on an RDD?
+- What is a shuffle in Spark?
+- What's the difference in output between MapReduce wordcount in Hadoop and .map followed by .reduceByKey in Spark?
+- Why should we be careful about using accumulators outside of an action?
+- What is the closure of a task?  Can we use variables in a closure?
+- How can we see the lineage of an RDD?
