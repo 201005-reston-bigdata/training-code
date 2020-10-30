@@ -27,7 +27,75 @@ object Runner {
 
     //fileDemo(sc)
 
-    closureDemo(sc)
+    //closureDemo(sc)
+
+    mapReduceWordCountDemo(sc)
+
+  }
+
+  def mapReduceWordCountDemo(sc: SparkContext) = {
+
+    val mrRdd = sc.textFile("somelines.txt")
+      .flatMap(_.split("\\s"))
+      .filter(_.length > 0)
+      .map((_, 1))
+      //something important happens at this step (the shuffle!)
+      .reduceByKey(_ + _)
+      //that important thing happens here too (shuffle again!)
+      .sortBy({case (k,v) => v})
+      //.repartition(10) just for demo, make more partitions, shuffles as well
+
+    mrRdd
+      .take(10) //take is the action
+      .foreach(println)
+
+    println(mrRdd.toDebugString)
+    // on any RDD we can call toDebugString and see lineage
+
+
+    // This does the same thing as our wordcount Mapreduce, and in general we
+    // can do MapReduce jobs using spark like this.  It's simpler and cleaner
+    // in many cases.
+    // Since we're doing MapReduce here, we have our shuffle.  managing when
+    // shuffles happen is key to writing efficient Spark applications.  The
+    // shuffle in spark has the same downsides as it does in MapReduce, it uses
+    // Map and Reduce operations under to achieve the shuffle.  It doesn't
+    // sort by default.  Refresher on downsides: network traffic, disk I/O
+    // we're doing 2 shuffles above, we should look to combine them.
+
+    // when we were sorting by key we probably could combine them sorting by
+    // value I'm less sure we can... hmm! maybe if we sort first.
+
+    // Some operations that cause shuffles:
+    // repartition and coalesce (these change the number of partitions)
+    // groupByKey, reduceByKey, other byKey methods
+    // joins will cause shuffles (connecting items in different datasets
+    //  based on references, foreign keys)
+
+    // Our RDDs need to be resilient, so we need to be able to recompute
+    // them if there is a failure.
+    // Every partition past our shuffle may depend on ALL the partitions prior
+    // to the shuffle.
+    // this causes a problem, because to recreate partitions past the shuffle
+    // we would to rerun basically the entire job up to the shuffle.  Obviously,
+    // Spark doesn't do this.  Instead, each shuffle writes output to disk
+    // so that in the case of failure we can recompute based on the disk output
+    // All of the disk output that happens with a shuffle is preserved
+    // until the RDD is no longer used.
+
+    // Can we write the shuffle output to RAM instead of disk
+    // and preserve it for the entire lifetime of the RDD in memory? not sure
+
+//    sc.parallelize(List("AK", "MS", "RI", "NY"))
+//      .map(("region-TODO", _))
+//      .filter({case (region,state) => region.equals("Northeast")})
+    // we now have an RDD of states in the northeast, partitioned across cluster for processing
+
+    //sort by line length
+//    sc.textFile("somelines.txt")
+//      .sortBy(_.length)
+//      .collect()
+//      .foreach(println)
 
   }
 
