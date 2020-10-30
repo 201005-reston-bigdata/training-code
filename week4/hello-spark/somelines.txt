@@ -2,3 +2,18 @@ here are some lines
 for a demo
 
 more lines here
+yet more
+lines in
+the file
+to make
+more partitions
+> more tasks
+a good default
+is to have
+at least 2 or 3 times as many
+partitions
+as executors
+each partition goes to a task
+so 2-3 as many tasks as executors
+helps spread computation
+across the cluster
