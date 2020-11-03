@@ -16,18 +16,18 @@ object Runner {
     //local means the job will run locally.  the [2] means it should use 2
     // executors.  You can specify a different number there or [*] to have
     // a number of executors equal to your number of cores.
-    val master = "local[4]"
+    //val master = "local[4]"
 
     //set up a configuration
-    val conf = new SparkConf().setAppName(appName).setMaster(master)
+    val conf = new SparkConf().setAppName(appName)//.setMaster(master)
     //build a SparkContext using that configuration
     val sc = new SparkContext(conf)
 
-    // helloDemo(sc)
+    helloDemo(sc)
 
-    //fileDemo(sc)
+    fileDemo(sc)
 
-    //closureDemo(sc)
+    closureDemo(sc)
 
     mapReduceWordCountDemo(sc)
 
@@ -35,7 +35,7 @@ object Runner {
 
   def mapReduceWordCountDemo(sc: SparkContext) = {
 
-    val mrRdd = sc.textFile("somelines.txt")
+    val mrRdd = sc.textFile("s3://rev-big-data/somelines.txt")
       .flatMap(_.split("\\s"))
       .filter(_.length > 0)
       .map((_, 1))
@@ -158,7 +158,7 @@ object Runner {
 
   def fileDemo(sc: SparkContext) = {
     //yet another way to create an RDD: from file
-    val distributedFile = sc.textFile("somelines.txt")
+    val distributedFile = sc.textFile("s3://rev-big-data/somelines.txt")
 
     //this will get us an RDD containing lines in the file, Rdd[String]
     // map is a transformation (lazy, produces RDD)
