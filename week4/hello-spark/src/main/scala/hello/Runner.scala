@@ -16,6 +16,7 @@ object Runner {
     //local means the job will run locally.  the [2] means it should use 2
     // executors.  You can specify a different number there or [*] to have
     // a number of executors equal to your number of cores.
+
     //val master = "local[4]"
 
     //set up a configuration

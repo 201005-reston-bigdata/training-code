@@ -24,4 +24,12 @@ Another important component of AWS, used all other the place, is S3: Simple Stor
 
 We're seeing this term *elastic* in a few places.  AWS's services are elastic meaning they can expand and contract, based on use.  With EMR, we can set our cluster to expand/contract based on the amount of processing we're asking of it.  This behaviour is configurable.  The tagline is "scale out to meet demand, scale in to reduce costs" and is one of the major value propositions of the cloud.
 
+### Tuesday afternoon assignment:
+
+Write a Scala app that runs a Spark job for EMR.  You can write a basic app that reads from "s3://rev-big-data/somelines.txt" and does something.  Feel free to write an app that does something else, but probably avoid I/O tasks.  If you're not reading from somelines.txt, parallelize a Scala collection to produce your first RDD. Make sure the Scala collection is decently sized if you do this.
+
+You don't need to do anything complicated, feel free to just write a wordcount if you like, or do something simple and different.  If your application takes too long we may skip the step.
+
+Send Adam the .jar once you've packaged it.
+
 
