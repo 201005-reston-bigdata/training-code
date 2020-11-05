@@ -14,14 +14,14 @@ object Runner {
     //  The commented version is for testing locally
 
     // For FINAL S3 version:
-    val conf = new SparkConf().setAppName(appName)
-    val sc = new SparkContext(conf)
-    val somelinesLocation = "s3://rev-big-data/somelines.txt"
+//    val conf = new SparkConf().setAppName(appName)
+//    val sc = new SparkContext(conf)
+//    val somelinesLocation = "s3://rev-big-data/somelines.txt"
 
     // For LOCAL testing:
-//    val conf = new SparkConf().setAppName(appName).setMaster("local[2]")
-//    val sc = new SparkContext(conf)
-//    val somelinesLocation = "somelines.txt"
+    val conf = new SparkConf().setAppName(appName).setMaster("local[2]")
+    val sc = new SparkContext(conf)
+    val somelinesLocation = "somelines.txt"
 
 
     //3. Here write your spark application.  The template here sums

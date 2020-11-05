@@ -20,7 +20,7 @@ The machines used to execute Spark jobs are called *executors*, in YARN these ru
 
 Amazon Web Services provides virtual machines and services built on top of them as a service, meaning you pay monthly/daily/hourly for the use of their computing machinery.  Almost everything on AWS is built on top of EC2s, which stands for Elastic Compute Cloud and is like a virtual server.  If you want a relational databse on AWS you can use RDS (Relational Database Service), which will get you your MySQL or similar database, managed by Amazon, running on an EC2 under the hood.  If you want a Hadoop cluster on AWS you can use EMR (Elastic MapReduce), which will you a preconfigured and managed Hadoop cluster, running on EC2s under the hood.
 
-Another important component of AWS, used all other the place, is S3: Simple Storage Service.  S3 lets your store objects in buckets on AMazon's servers.  You can retrieve these objects yourself with access keys, or you make them public.  You can tweak many setting relating to access and efficiency.  Ultimately, S3 is kinda like good drive or similar -- we upload files to access them later or share them.  S3 is important because it's common to write to s3 or read from s3 in many different contexts.
+Another important component of AWS, used all other the place, is S3: Simple Storage Service.  S3 lets your store objects in buckets on Amazon's servers.  You can retrieve these objects yourself with access keys, or you make them public.  You can tweak many setting relating to access and efficiency.  Ultimately, S3 is kinda like google drive or similar -- we upload files to access them later or share them.  S3 is important because it's common to write to s3 or read from s3 in many different contexts.
 
 We're seeing this term *elastic* in a few places.  AWS's services are elastic meaning they can expand and contract, based on use.  With EMR, we can set our cluster to expand/contract based on the amount of processing we're asking of it.  This behaviour is configurable.  The tagline is "scale out to meet demand, scale in to reduce costs" and is one of the major value propositions of the cloud.
 
@@ -75,7 +75,7 @@ Next steps:
 - The number of partitions in a job is important.  If we have too few partitions, we need to worry about not effective using all the resources on our cluster.  If you have 4 partitions and 20 machines, only 4 of those machines can possibly run at one time.  We can specify a minimum number of partitions when we're reading out sc.textFile(filename, minPartitions)
 - The number of partitions remains important after shuffles, if the data is still large.  It's possible to start out with a reasonable number of partitions and reduceByKey into a bad number of partitions (most often too low).
 - Guidance for partitions is to have at least twice as many as cores on your cluster as a lower bound, and to have few enough that tasks take at least 100ms to complete as an upper bound.
-- Similar to spark.driver.memory above, we can tweak spark.executor.memory to provide more/less memory to each executor.  This can be useful to prevent "spills", which incur an aadditional cost of Disk I/O.
+- Similar to spark.driver.memory above, we can tweak spark.executor.memory to provide more/less memory to each executor.  This can be useful to prevent "spills", which incur an additional cost of Disk I/O.
 
 
 
