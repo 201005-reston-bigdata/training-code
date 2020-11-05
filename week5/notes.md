@@ -32,4 +32,55 @@ You don't need to do anything complicated, feel free to just write a wordcount i
 
 Send Adam the .jar once you've packaged it.
 
+Find the template for the job in week5 folder in the git repo.
+
+### Alphabetize debugging
+
+interesting facts:
+- Spark doesn't have any tasks marked as complete in Stage 2
+- EMR's YARN application history has 3 of the stage 4 tasks marked as active and 1 as completed
+- The stderr for executor 1 outputs messages that say tasks with TID 9 and 11 are complete
+- The stderr for executor 2 outputs messages that say tasks with TID 8 and 10 are complete.  It then
+  logs an Exception due to the driver program resetting the connection.  We get an exception for the "heartbeater"
+- Both executors end with executor self-exiting due to driver IP disassociated
+- The stdout from the driver application gives us a java.lang.OutOfMemoryError
+
+Adam's current pitch:
+everything went well, including tasks on executors, until the collect occurred.  While sending the output of tasks in the collect stage to the driver, the driver ran out of memory and crashed.  The executors then failed due to lack of communication from the driver.
+
+Note on the above: The executors had GC allocation failures, which mean they didn't have enough memory, which triggered Garbage Collection to free some up.  The driver had an OutOfMemoryError, which was fatal.
+On that same, note in memory processing on the executors can "spill" to disk if necessary.  While our executors are processing tasks, if they come close to running out of memory they can write some of their memory to disk, and process smaller amounts at any one time.  
+
+Potential problems with that pitch? Not sure.
+
+Leftover questions:
+- If driver has GB of mem by default how did driver have OOM with much smaller data? possibly just Java objects being larger, but not sure
+- Can we get an EMR to use like swapfile to alleviate OOM? Good question, I believe yes, but Spark tools will most likely be better since they have more information about the data being temporarily stored on disk.
+- Can we break the processing up into chunks?  for collect, no.  We could instead take() to just retrieve a manageable amount of the RDD.  On the cluster, yes we break processing up into chunks by partitioning it.
+- Why are the Spark history server and the YARN application history in EMR inconsistent?  Why exactly are both listed as still running?  Possibly cluster vs client would affect consistency.
+
+Next steps:
+- Try running in cluster mode instead of client mode, explore results.
+- Try to rewrite the application to not use collect on a large RDD like this, probably writing to file.
+- spark.driver.memory, which defaults to 1g, can be changed.  Since we're running in client mode we'll want to do this with an argument to
+  our spark submit. (there's a UI in EMR for this)  This can provide more memory to the driver application, hopefully fixing the problem.
+- spark.driver.maxResultSize can be changed.  This will abort jobs which which provide serialized results to the driver over a certain size.  
+  The default cutoff is 1g.  We could lower this value to make the job be aborted rather than crash due to OOM Error.  In general, aborting the 
+  job is preferable to having the job crash.
+
+### Tuning spark job notes:
+
+- To begin with, each action is going to spawn a Job.  RDDs aren't shared between jobs, so it can be fruitful to attempt to put job together.  This is common refrain when optimizing spark jobs, we want to minimize the number of times we go over the data.
+  - A caveat here is that the files written to local disk as part of a shuffle *can* be used in future jobs, Spark will skip stages if the output of those stages already exists on local disk.
+- The number of partitions in a job is important.  If we have too few partitions, we need to worry about not effective using all the resources on our cluster.  If you have 4 partitions and 20 machines, only 4 of those machines can possibly run at one time.  We can specify a minimum number of partitions when we're reading out sc.textFile(filename, minPartitions)
+- The number of partitions remains important after shuffles, if the data is still large.  It's possible to start out with a reasonable number of partitions and reduceByKey into a bad number of partitions (most often too low).
+- Guidance for partitions is to have at least twice as many as cores on your cluster as a lower bound, and to have few enough that tasks take at least 100ms to complete as an upper bound.
+- Similar to spark.driver.memory above, we can tweak spark.executor.memory to provide more/less memory to each executor.  This can be useful to prevent "spills", which incur an aadditional cost of Disk I/O.
+
+
+
+
+
+
+
 
