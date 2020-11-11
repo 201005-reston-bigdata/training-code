@@ -101,7 +101,7 @@ object Runner {
 
     demoQuery2.select(demoQuery2("value").alias("Full name")).show()
 
-    demoQuery2.explain(true)
+    demoQuery2.explain()
 
     //Things to note: the optimizer cant add a Projection here because it's constructing Person objects
     // rather than generic rows.  On the other hand, Spark can efficiently serialize and deserialize
@@ -115,7 +115,7 @@ object Runner {
       .createOrReplaceTempView("names")
 
     //Now that we have the view, we can refer to it in a SQL query:
-    spark.sql("SELECT * FROM names").show()
+    println(spark.sql("SELECT * FROM names").rdd.toDebugString)
 
     //Notably, the result of spark.sql here is a DataFrame.  Each line in the resultset is a Row
     // in the output dataframe.
