@@ -16,10 +16,11 @@
 - Can we access the SparkContext via a SparkSession?
 - What other contexts are superseded by SparkSession?
 - What are some data formats we can query with Spark SQL?
-- Are DataSets lazyile evalauted, like RDDs?
+- Are DataSets lazily evalauted, like RDDs?
 - What are some functions available to us when using DataFrames?
 - What's the difference between aggregate and scalar functions?
 - How do we convert a DataFrame to a DataSet?
 - How do we provide structure to the data contained in a DataSet?
 - How do we make a Dataset queryable using SQL strings?
 - What is the return type of spark.sql("SELECT * FROM mytable") ?
+- How do we see the logical and physical plans produced to evaluate a DataSet?
