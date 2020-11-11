@@ -1,6 +1,6 @@
 package hellosparksql
 
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SparkSession, functions}
 
 object Runner {
   def main(args: Array[String]) = {
@@ -48,5 +48,85 @@ object Runner {
 
     //The other way, without the $ to select columns is to use df("columnname")
     df.select(df("name"), df("age") + 20).show()
+    // the $ and df("colname") produce an object of type Column which has functionality and can
+    // be used in expressions.  Just passing a string to select retrieve a column by name with
+    // no additional functionality.
+
+    //access nested fields with .
+    df.select("name.first", "name.last").show()
+
+    // run some demo functionality
+    df.groupBy("eyeColor").count().show()
+
+    df.filter($"age" > 30).show()
+
+    //Many useful built in functions
+    // some are "scalar" functions that operate on one value
+    // others are "aggregate" functions that operate on groups of values
+    df.select(functions.exp($"age")).show() //exponentiation
+    df.select(functions.round($"age", -1)).show() //round to nearest 10
+
+    //Average age by eye color for people with first name of length < 6:
+    val demoQuery = df.filter(functions.length($"name.first") < 6)
+      .groupBy("eyeColor")
+      .agg(functions.avg("age"))
+
+    //This will make it run and print a result
+    demoQuery.show()
+    //This won't make it run, it will explain catalyst's plan.  Somewhat similar
+    // to toDebugString for RDDs
+    demoQuery.explain(true)
+
+    //On that rdd note: access underlying rdds easily
+    println(demoQuery.rdd.toDebugString)
+
+    //To note about this output:
+    // The catalyst optimizer adds a Project into our optimized logical plan, taking
+    // advantage of that fact that our demoQuery doesn't actually use all the columns
+    // Also, stages are represented by *(stageno) in the physical plan, as opposed
+    // to stages represented by indentation in the debugString for an RDD.
+
+    //let use some DataSets, which are strongly typed.  We'll create case classes
+    // for the data we want to use
+    // We can easily create DataSets from DataFrames using "as"
+    val ds = df.as[Person]
+
+    //Instead of having Rows inside our DataSet, which would make it a DataFrame, we have
+    // Person objects instead that we've defined
+    // Strong typing saves us from runtime errors by checking type at compile time
+    ds.filter(person => person.name.first.length < 6).show()
+
+    val demoQuery2 = ds.filter(_.name.first.length < 6)
+      .map(person => s"${person.name.first} ${person.name.last}")
+
+    demoQuery2.select(demoQuery2("value").alias("Full name")).show()
+
+    demoQuery2.explain(true)
+
+    //Things to note: the optimizer cant add a Projection here because it's constructing Person objects
+    // rather than generic rows.  On the other hand, Spark can efficiently serialize and deserialize
+    // case classes, since it has more information about their structure.
+    //Adam's suspicion is that DataFrame would be faster here, because of the Projection savings
+
+    //We can also write SQL queries, to be run on RDDs, files, hive tables, generally Spark input formats
+    //To use SQL functionality in Spark SQL we create temporary views from the DataSet we want to query
+    // This creates a dataset of Names and creates a temporary view called "names"
+    spark.createDataset(List(Name("adam", "king"), Name("jeff", "goldblum")))
+      .createOrReplaceTempView("names")
+
+    //Now that we have the view, we can refer to it in a SQL query:
+    spark.sql("SELECT * FROM names").show()
+
+    //Notably, the result of spark.sql here is a DataFrame.  Each line in the resultset is a Row
+    // in the output dataframe.
+    // SQL, DataFrames, DataSets can be used interchangeably
+
+
   }
+
+  case class Person(_id: String, address: String, age: Long, eyeColor: String, index: Long, name: Name, phone: String ) {}
+
+  case class Name(first: String, last:String) {}
+
+
 }
