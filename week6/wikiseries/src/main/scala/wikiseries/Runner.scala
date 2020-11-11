@@ -7,14 +7,14 @@ object Runner {
     val appName = "wikiseries"
 
     // For FINAL S3 version:
-    //    val conf = new SparkConf().setAppName(appName)
-    //    val sc = new SparkContext(conf)
-    //    val somelinesLocation = "s3://rev-big-data/somelines.txt"
+        val conf = new SparkConf().setAppName(appName)
+        val sc = new SparkContext(conf)
+        val inputClickstream = "s3://rev-big-data/clickstream-enwiki-2020-09.tsv"
 
     // For LOCAL testing:
-    val conf = new SparkConf().setAppName(appName).setMaster("local[8]")
-    val sc = new SparkContext(conf)
-    val inputClickstream = "clickstream-enwiki-2020-09.tsv"
+//    val conf = new SparkConf().setAppName(appName).setMaster("local[8]")
+//    val sc = new SparkContext(conf)
+//    val inputClickstream = "clickstream-enwiki-2020-09.tsv"
 
     //shuffleJoinPageviewFraction(sc, inputClickstream)
 
@@ -29,7 +29,7 @@ object Runner {
     // to arrive at the same values, but we're using a different and more efficient
     // process.
 
-    val splitRecords = sc.textFile(file)
+    val splitRecords = sc.textFile(file, 1000)
       .map(_.split("\t"))
 
     // We still need pageviews, but instead of leaving them as an RDD
@@ -56,11 +56,11 @@ object Runner {
       {case (fromPage, (toPage, frac)) => (toPage, (List(fromPage, toPage), frac))}
     )
 
-    val ITERATIONS = 2
+    val ITERATIONS = 3
 
     for(i <- 1 to ITERATIONS) {
       seriesFractionByLastPage = seriesFractionByLastPage
-        .join(estimatedFraction)
+        .join(estimatedFraction) //definitely want to get this small enough we can broadcast it
         .map(
           { case (fromPage, ((series, seriesFrac), (addedPage, addedPageFrac))) =>
             (addedPage, (series :+ addedPage, seriesFrac * addedPageFrac))
@@ -68,9 +68,8 @@ object Runner {
         )
     }
 
+    println("50 series of pages with associated estimated fraction of users:")
     seriesFractionByLastPage.take(50).foreach(println)
-
-
 
 
   }
