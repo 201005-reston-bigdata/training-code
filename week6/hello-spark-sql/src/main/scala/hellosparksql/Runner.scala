@@ -1,7 +1,7 @@
 package hellosparksql
 
 import org.apache.spark.sql.types.IntegerType
-import org.apache.spark.sql.{SparkSession, functions}
+import org.apache.spark.sql.{Column, SparkSession, functions}
 
 object Runner {
   def main(args: Array[String]) = {
@@ -63,8 +63,8 @@ object Runner {
 
     //not a particularly useful join, but interesting for demo purposes
     studentHouseDf
-      .join(houseDetailDf, studentHouseDf("age") > 30, "full").show(4000)
-
+      .join(houseDetailDf, studentHouseDf("age") > 30 && studentHouseDf("house") === houseDetailDf("house"), "full").show(4000)
+    
   }
 
   def parquetWritingDemo(spark: SparkSession) = {
