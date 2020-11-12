@@ -39,4 +39,43 @@ Why the difference?  First, DataFrames were released with Spark 1.3 as another w
 
 We have 3 APIs for Spark SQL: SQL/HiveQL string queries, DataFrames, and DataSets.  All of them run on the catalyst optimizer under the hood which creates RDDs.  It's fine and even encouraged to use different APIs based on context and your familiarity.
 
+### SparkContext, SqlContext, HiveContext, SparkSession
+
+For our code, we're going to use SparkSession.  SparkSession is new in Spark 2.0 and supersedes all of SparkContext, SqlContext, and HiveContext.
+In Spark 1.0, we had SparkContext that handled RDDs, SqlContext that handled Spark SQL (SQL statementes, DataFrames, DataSets), and HiveContext that handled reading/writing to Hive Tables.  SqlCOntext is sufficient to work with HDFS, it's just Hive itself we needed a HiveContext for.
+When using SparkSession, we get the functionality of SqlContext and SparkCOntext out of the box.  To enable Hive support, we need to call .enableHiveSupport() on our SparkSession when building it, which will read hive configuration from the conf directory.
+
+### Joins (continued)
+
+If we join an RDD containing (String, Double) and an RDD containing (String, String) the output will be an RDD
+containing (String, (Double, String)) example 2:
+RDD 1: ("a", 1.1), ("b", 2.2), ("c", 3.3)
+RDD 2: ("a", "alpha"), ("b", "beta"), ("c", "gamma")
+product of join: ("a", (1.1, "alpha")), ("b", (2.2, "beta")), ("c", (3.3, "gamma"))
+
+This is a specific example of a join, joins exist in many contexts.  Most notably in RDBMSs because your RDBMS stored "normalized" data.  One of the goals of normalizing your data is to never represent the same piece of data more than 1 time.  This means our RDBMSs will have many tables the frequently need to be joined together.
+
+#### Types of Joins
+What happens if we have:
+RDD 1: ("a", 1.1), ("b", 2.2), ("d", 4.4)
+RDD 2: ("a", "alpha"), ("b", "beta"), ("c", "gamma") ?
+
+It depends on the type of join we're using.  There are 4 types: Inner, Left Outer, Right Outer, Full Outer.
+If we use an inner join, then output:  ("a", (1.1, "alpha")), ("b", (2.2, "beta")))
+If we use a left outer join, then output:  ("a", (1.1, "alpha")), ("b", (2.2, "beta")), ("d", (4.4, None)))
+If we use a right outer join, then output:  ("a", (1.1, "alpha")), ("b", (2.2, "beta")), ("c", (None, "gamma")))
+If we use a full outer join, then output:  ("a", (1.1, "alpha")), ("b", (2.2, "beta")), ("c", (None, "gamma")), ("d", (4.4, None))
+
+When you don't the type of join specified, it's most often an inner join.
+
+#### Join Conditions
+
+Using RDDs .join method, the join condition is the keys in each RDD being equal.  Generally your join condition tells us when two records out of the pair of datasets should be joined together in the output.  When the join condition is true for a given pair of records, those two records are joined in the output.  When the join condition is false, they are not.  The join condition is evaluated for *every pair* of records.  So if we're joining a dataset with 10 records to a dataset with 20 records, the join condition will be evaluated for 10*20=200 pairs of records.
+
+The typical use case of joining has the join condition evaluate to true for one or zero pairs of records.  That being said, we can have join conditions that evaluate to true based on any condition we prefer.  If your join condition is an inequality like > or <, we call that a *theta join*.  If you join condition returns true in all cases, we call that a *cartesian join*.
+
+
+
+
+
 

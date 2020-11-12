@@ -71,6 +71,8 @@ object Runner {
       .groupBy("eyeColor")
       .agg(functions.avg("age"))
 
+    functions
+
     //This will make it run and print a result
     demoQuery.show()
     //This won't make it run, it will explain catalyst's plan.  Somewhat similar
