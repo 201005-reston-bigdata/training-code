@@ -26,6 +26,21 @@ object Runner {
     //We can access our familar SparkContext if we like
     spark.sparkContext.setLogLevel("WARN")
 
+    //helloSparkSqlDemo(spark)
+    thursdayDemo(spark)
+  }
+
+  def thursdayDemo(spark: SparkSession) = {
+
+    val df = spark.read.option("header", "true").csv("student-house.csv")
+
+    df.show()
+
+    df.printSchema()
+  }
+
+  def helloSparkSqlDemo(spark: SparkSession) = {
+    import spark.implicits._
     //From the Spark Session we can create a DataFrame.  We're going to read from
     // a Json file here.  We can also produce DataFrames from RDDs, parquet files,
     // Hive tables, SQL tables, ... Spark input formats generally.

@@ -99,7 +99,7 @@ Since Parquet is columnar, it can encode the data for each column efficiently fo
     - Gryffindor 9, Hufflepuff ...
 - Bit Packing: Parquet offers int32, int64, and int96 data types for integral values, but will "pack" smaller values so they don't take up unnecessary space.  Tiny numbers are stored more efficiently under the hood than taking up 32 bits each.
 
-A few more features/things to know: Parquet can handle null values, which it encodes efficiently using RLE, and it handle arbitrarily nested data structures.  Parquet is a binary format, so reading it with a text editor or cat or similar is not going to work very well.  Parquet can and by default is compressed as well as being encoded using the optmiziations above.
+A few more features/things to know: Parquet can handle null values, which it encodes efficiently using RLE, and it handle arbitrarily nested data structures.  Parquet is a binary format, so reading it with a text editor or cat or similar is not going to work very well.  Parquet can and by default is compressed as well as being encoded using the optmiziations above.  We can also partition our Parquet files.
 
 
 
