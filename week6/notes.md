@@ -74,6 +74,33 @@ Using RDDs .join method, the join condition is the keys in each RDD being equal.
 
 The typical use case of joining has the join condition evaluate to true for one or zero pairs of records.  That being said, we can have join conditions that evaluate to true based on any condition we prefer.  If your join condition is an inequality like > or <, we call that a *theta join*.  If you join condition returns true in all cases, we call that a *cartesian join*.
 
+You can think of the Join Condition deciding which records get put together in the output, then the type of join determines what (if anything) we should do with the records that didn't have any matches.
+
+The most common join condition is having the value in one column in dataset 1 be equal to the value in a column in dataset 2.  If the two columns we're joining on have the same name we call it a *natural join*
+
+### Parquet
+
+Apache Parquet is a data storage format used with Apache tools + beyond.  We write to parquet files and read from parquet files, parquet is not like a running database or a program, it's just a storage format.  Parquet is meant to be used for large amounts of data that is very infrequently written/edited and often read or queried.
+
+If our use case is storing/writing some data once, then querying it for information 100000 times, Parquet is a great choice
+If our use case is storing/writing some data incrementally over time and only occasionally reading it back out, Parquet is most often a bad choice.  Parquet is formatted to be efficient, meaning it taks relatively little space on disk, and to be fast to query.  We are able quickly retrieve records meeting conditions from parquet files.  It achieves these by being quite difficult and time consuming to write.
+
+Parquet is *columnar* data storage format.  This is in contrast to formats like .csv or .tsv that contain data in rows in order on disk.  
+Where student-house.csv has ssn, first_name, last_name, ssn, first_name, last_name, ssn, first_name, last_name, ssn, first_name, last_name, ...
+Our parquet file has ssn, ssn, ssn, ... first_name, first_name, first_name, ... last_name, last_name, last_name, ...
+^ This is a demo of columnar, parquet files are more complicated.  They are split up into "row groups" and contain metadata at multiple levels.
+
+Since Parquet is columnar, it can encode the data for each column efficiently for that column.  Some of the efficiency gains parquet achieves:
+- Dictionary encoding: if a column has a relatively small number of values, Parquet will store it as a dictionary with byte keys instead of reproducing entire values for each entry in a column. ex:
+    - Gryffindor, Gryffindor, Gryffindor, Hufflepuff, Hufflepuff, Ravenclaw, Gryffindor, Slytherin, ..
+    - 1,1,1,2,2,3,1,4, .., combined with a dictionary 1->Gryffindor, 2->Hufflepuff, ...
+- Run Length Encoding (RLE): if a column has a number of values in a row that are the same, we encode that "run" of values as the value and the length of the run, instead of repeating the value. ex:
+    - Gryffindor, Gryffindor, Gryffindor, Gryffindor, Gryffindor, Gryffindor, Gryffindor, Gryffindor, Gryffindor, Hufflepuff, ...
+    - Gryffindor 9, Hufflepuff ...
+- Bit Packing: Parquet offers int32, int64, and int96 data types for integral values, but will "pack" smaller values so they don't take up unnecessary space.  Tiny numbers are stored more efficiently under the hood than taking up 32 bits each.
+
+A few more features/things to know: Parquet can handle null values, which it encodes efficiently using RLE, and it handle arbitrarily nested data structures.  Parquet is a binary format, so reading it with a text editor or cat or similar is not going to work very well.  Parquet can and by default is compressed as well as being encoded using the optmiziations above.
+
 
 
 
