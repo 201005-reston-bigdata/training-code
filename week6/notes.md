@@ -53,7 +53,7 @@ RDD 1: ("a", 1.1), ("b", 2.2), ("c", 3.3)
 RDD 2: ("a", "alpha"), ("b", "beta"), ("c", "gamma")
 product of join: ("a", (1.1, "alpha")), ("b", (2.2, "beta")), ("c", (3.3, "gamma"))
 
-This is a specific example of a join, joins exist in many contexts.  Most notably in RDBMSs because your RDBMS stored "normalized" data.  One of the goals of normalizing your data is to never represent the same piece of data more than 1 time.  This means our RDBMSs will have many tables the frequently need to be joined together.
+This is a specific example of a join, joins exist in many contexts.  Most notably in RDBMSs because your RDBMS stored "normalized" data.  One of the goals of normalizing your data is to never represent the same piece of data more than 1 time.  This means our RDBMSs will have many tables that frequently need to be joined together.
 
 #### Types of Joins
 What happens if we have:
@@ -61,9 +61,9 @@ RDD 1: ("a", 1.1), ("b", 2.2), ("d", 4.4)
 RDD 2: ("a", "alpha"), ("b", "beta"), ("c", "gamma") ?
 
 It depends on the type of join we're using.  There are 4 types: Inner, Left Outer, Right Outer, Full Outer.
-If we use an inner join, then output:  ("a", (1.1, "alpha")), ("b", (2.2, "beta")))
-If we use a left outer join, then output:  ("a", (1.1, "alpha")), ("b", (2.2, "beta")), ("d", (4.4, None)))
-If we use a right outer join, then output:  ("a", (1.1, "alpha")), ("b", (2.2, "beta")), ("c", (None, "gamma")))
+If we use an inner join, then output:  ("a", (1.1, "alpha")), ("b", (2.2, "beta"))
+If we use a left outer join, then output:  ("a", (1.1, "alpha")), ("b", (2.2, "beta")), ("d", (4.4, None))
+If we use a right outer join, then output:  ("a", (1.1, "alpha")), ("b", (2.2, "beta")), ("c", (None, "gamma"))
 If we use a full outer join, then output:  ("a", (1.1, "alpha")), ("b", (2.2, "beta")), ("c", (None, "gamma")), ("d", (4.4, None))
 
 When you don't the type of join specified, it's most often an inner join.

@@ -24,3 +24,18 @@
 - How do we make a Dataset queryable using SQL strings?
 - What is the return type of spark.sql("SELECT * FROM mytable") ?
 - How do we see the logical and physical plans produced to evaluate a DataSet?
+
+- What is a join condition?
+- What is the difference between inner, outer left, outer right, and outer full joins?
+- What is a cross join / cartesian join?
+- If I join two datasets with 10 records each, what is the maximum possible number of records in the output?
+    - How many records would be in the output of a cross join/cartesian join?
+- What is Parquet?
+- What does it mean that parquet is columnar storage?
+- Parquet is stored efficiently on disk and is easy to query, traits that make it useful for big data.  What are the downsides of the parquet format?
+- How can Parquet's columnar storage efficently encode the column value:s "Kentucky, Kentucky, Kentucky, Kentucky, Virginia, Virginia, Virginia"?
+- What is RLE?
+- What is Dictionary encoding?
+- How can we partition files we write using dataframes in Spark?
+- How is a partitioned parquet file stored in the filesystem?
+- What are some benefits of storing your data in partitions?

@@ -64,7 +64,7 @@ object Runner {
     //not a particularly useful join, but interesting for demo purposes
     studentHouseDf
       .join(houseDetailDf, studentHouseDf("age") > 30 && studentHouseDf("house") === houseDetailDf("house"), "full").show(4000)
-    
+
   }
 
   def parquetWritingDemo(spark: SparkSession) = {
