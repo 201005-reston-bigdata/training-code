@@ -7,7 +7,7 @@ import org.apache.http.client.config.{CookieSpecs, RequestConfig}
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.impl.client.HttpClients
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SparkSession, functions}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,14 +41,73 @@ object StructuredStreamingRunner {
     // and use its inferred schema.  Requires some files in twitterstream
     val staticDf = spark.read.json("twitterstream")
 
-    spark.readStream.schema(staticDf.schema).json("twitterstream")
-      .select("data.text")
-      
+    val streamDf = spark.readStream.schema(staticDf.schema).json("twitterstream")
+
+//    val textQuery = streamDf
+//      .select($"data.text")
+//      .writeStream
+//      .outputMode("append")
+//      .format("console")
+//      .start()
+//
+//    textQuery.awaitTermination(60000)
+
+//    val wordCountQuery = streamDf
+//      .select($"data.text")
+//      .as[String]
+//      .flatMap(_.split("\\s"))
+//      .filter(_.length > 5)
+//      .withColumn("word", $"value")
+//      .groupBy("word")
+//      .count()
+//      .sort(functions.desc("count"))
+//      .writeStream
+//      .outputMode("complete")
+//      .format("console")
+//      .start()
+//
+//    wordCountQuery.awaitTermination(60000)
+
+    //wordcount individual tweets
+//    streamDf
+//      .select($"data.text")
+//      .as[String]
+//      .map(text => text.split("\\s+"))
+//      .map(arr => arr.toList
+//        .filter(word => word.length>0)
+//        .map(word => (word,1))
+//        .groupBy(kv => kv._1)
+//        .mapValues(valueList => valueList.length)
+//      )
+//      .writeStream
+//      .outputMode("append")
+//      .format("console")
+//      .start()
+//      .awaitTermination()
+
+
+    //Most used twitter handles, aggregated over time:
+    val pattern = ".*(@\\w+)\\s+.*".r
+
+    streamDf
+      .select($"data.text")
+      .as[String]
+      .map(text => {
+        text match {
+          case pattern(handle) => {handle}
+          case notFound => {"no @ found"}
+        }
+      })
+      .groupBy("value")
+      .count()
+      .sort(functions.desc("count"))
       .writeStream
-      .outputMode("append")
+      .outputMode("complete")
       .format("console")
       .start()
-      .awaitTermination(60000)
+      .awaitTermination()
+
+
 
   }
 
