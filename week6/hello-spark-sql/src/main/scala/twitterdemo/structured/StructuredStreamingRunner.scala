@@ -7,9 +7,13 @@ import org.apache.http.client.config.{CookieSpecs, RequestConfig}
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.impl.client.HttpClients
+import org.apache.spark.sql.SparkSession
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object StructuredStreamingRunner {
-  def main(args: Array[String]) = {
+  def main(args: Array[String]): Unit = {
     //We have some API keys, secrets, tokens from the Twitter API
     //We definitely do not want to hardcode these.
     //If you *must* hardcode these, then gitignore the files that contain them
@@ -20,10 +24,32 @@ object StructuredStreamingRunner {
     //We can set environment variables in our run config in IntelliJ
 
     val bearerToken = System.getenv("BEARER_TOKEN")
-
     println(s"Bearer token is : $bearerToken")
+    //Run tweetStreamToDir in the background:
+    Future {
+      tweetStreamToDir(bearerToken)
+    }
 
-    tweetStreamToDir(bearerToken)
+    val spark = SparkSession.builder()
+      .appName("Hello Spark Structured Streaming")
+      .master("local[4]") // when streaming some threads need to be Receivers that listen, so we need more than typical
+      .getOrCreate()
+    import spark.implicits._
+    spark.sparkContext.setLogLevel("WARN")
+
+    //When streaming, we can't infer the schema so let's create a static dataframe
+    // and use its inferred schema.  Requires some files in twitterstream
+    val staticDf = spark.read.json("twitterstream")
+
+    spark.readStream.schema(staticDf.schema).json("twitterstream")
+      .select("data.text")
+      
+      .writeStream
+      .outputMode("append")
+      .format("console")
+      .start()
+      .awaitTermination(60000)
+
   }
 
   def tweetStreamToDir(bearerToken: String, dirname:String="twitterstream", linesPerFile:Int=1000) = {
