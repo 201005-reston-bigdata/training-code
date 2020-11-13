@@ -101,7 +101,13 @@ Since Parquet is columnar, it can encode the data for each column efficiently fo
 
 A few more features/things to know: Parquet can handle null values, which it encodes efficiently using RLE, and it handle arbitrarily nested data structures.  Parquet is a binary format, so reading it with a text editor or cat or similar is not going to work very well.  Parquet can and by default is compressed as well as being encoded using the optmiziations above.  We can also partition our Parquet files.
 
+### Streaming Data in Spark
 
+Streaming data refers to data that's being produced and processed in near-real time.  Spark provides multiples functionalities, multiple APIs for handling streaming data.  Both of them are built on Spark core, at the very base level we're still working with RDDs.  Both of the ways Spark handles streams involve breaking down the incoming data into small batches and processing those batches.
+
+spark-streaming : Spark streaming makes use of a StreamingContext, which is similar to a SparkContext.  Streams are handled as DStreams, which are streams of data turned into small batches and processed using RDDs directly.  Spark-streaming is like working with RDDs, except the underlying data source is streaming data.  In general, spark streaming provides more fine-grained control.
+
+Spark Structured Streaming : Structured streaming is a feature of Spark SQL.  Streams are handled as DataFrames/DataSets that are incrementally updated with new data coming in through the stream.  We work with the DataFrame + DataSet API, and our DFs/DSs have rows appended to the bottom of them as streaming data comes in.  In general, structured streaming is easier to use well, since it just makes use of the Spark SQL APIs.  Structured streaming takes input from files, sockets (not for prod), Kafka and Kinesis.  Kafka we'll see next week.
 
 
 

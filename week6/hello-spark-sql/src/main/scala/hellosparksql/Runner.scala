@@ -4,7 +4,7 @@ import org.apache.spark.sql.types.IntegerType
 import org.apache.spark.sql.{Column, SparkSession, functions}
 
 object Runner {
-  def main(args: Array[String]) = {
+  def mainFunc(args: Array[String]) = {
     //SparkSession is the entry point for Spark applications using Spark SQL
     //  It's new in Spark 2.0 and it unifies earlier disparate entrypoints:
     //  SparkContext, SqlContext and HiveContext
