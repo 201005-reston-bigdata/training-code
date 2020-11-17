@@ -13,7 +13,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object StructuredStreamingRunner {
-  def main(args: Array[String]): Unit = {
+  def structMain(args: Array[String]): Unit = {
     //We have some API keys, secrets, tokens from the Twitter API
     //We definitely do not want to hardcode these.
     //If you *must* hardcode these, then gitignore the files that contain them
