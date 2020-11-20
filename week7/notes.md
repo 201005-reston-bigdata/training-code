@@ -37,3 +37,11 @@ In addition to being a platform that lets client applications publish and subscr
 Relation to Spark: if we want to transform a Kafka topic into another Kafka topic, our first tool to use would be Kafka Streams.  If that processing/transformation was expensive, we might instead subscribe to the topic with Spark, do the processing on our Spark cluster, and publish the result back to Kafka.
 
 On a more general note, Spark is a tool for Big/Fast data processing.  Kafka is distributed pub/sub used in large networks.  Lots of big companies use Kafka primarily as a way for their microservices to communicate.  We're learning about it because Kafka is widespread and handles a large amount of data, so those same messages sent across the network with Kafka for business use can be pulled into Spark and processed for real time analytics.  Similar to stream transformation, Spark is probably not the first tool your average developer would reach for, it's instead the tool you use when you need big/fast data processing.
+
+### Zookeeper
+
+Zookeeper is a service that maintains information about cluster configuration in the Hadoop ecosystem.  Zookeeper is necessary to run to use Kafka.  This is going to be phased out (in the future you won't need Zookeeper), but for now we still need it.  Zookeeper is used by Kafka when kafka brokers (workers/nodes) fail to help elect new leaders.
+
+### Kafka Partitions
+
+Kafka is built to be scalable, which means its individual topics must be able to scale as well.  The way that Kafka does this is by partitioned each topic.  We choose (or have Kafka choose for us) some value in our events in a topic to use as a key to partition by.  Kafka then hashes the key and assigns the event to the appropriate partition.  All of the events that hash to the same value will be found in the same partition.

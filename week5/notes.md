@@ -70,12 +70,27 @@ Next steps:
 
 ### Tuning spark job notes:
 
-- To begin with, each action is going to spawn a Job.  RDDs aren't shared between jobs, so it can be fruitful to attempt to put job together.  This is common refrain when optimizing spark jobs, we want to minimize the number of times we go over the data.
-  - A caveat here is that the files written to local disk as part of a shuffle *can* be used in future jobs, Spark will skip stages if the output of those stages already exists on local disk.
+- To begin with, each action is going to spawn a Job.  RDDs *can* be shared between jobs, either by caching/persisting the RDD to memory or disk, which lets it be reused within the same SparkContext.  RDDs will also automatically be reused to skip stages when possible, based on shuffle intermediate values being written to disk.
+  - Note: this bullet point was edited
 - The number of partitions in a job is important.  If we have too few partitions, we need to worry about not effective using all the resources on our cluster.  If you have 4 partitions and 20 machines, only 4 of those machines can possibly run at one time.  We can specify a minimum number of partitions when we're reading out sc.textFile(filename, minPartitions)
 - The number of partitions remains important after shuffles, if the data is still large.  It's possible to start out with a reasonable number of partitions and reduceByKey into a bad number of partitions (most often too low).
 - Guidance for partitions is to have at least twice as many as cores on your cluster as a lower bound, and to have few enough that tasks take at least 100ms to complete as an upper bound.
 - Similar to spark.driver.memory above, we can tweak spark.executor.memory to provide more/less memory to each executor.  This can be useful to prevent "spills", which incur an additional cost of Disk I/O.
+
+### Applications, Jobs, Stages, Tasks in Spark
+- Your Application is one call to spark-submit.  It's one .jar file with your Scala code, one SparkContext.  RDDs in that context, if cached or written to disk as part of a shuffle can be reused.
+- Jobs are produces every time we perform an *action* on an RDD, like collect, take, ...
+- Stages are groups of tasks that run on the same data (the same partition).  Our jobs are divided up into stages based on how many times we shuffle the data.  Each shuffle means a new stage is starting, on the new partitions produced by the shuffle.
+- Tasks are *transformations* like map that operate on a single partition, they exist within stages.  The wide transformations that cause shuffles also produce tasks.
+
+### Caching and persisting, storage levels:
+We have two methods to tell spark to save an RDD so we can reuse it later, .cache() and .persist().  .cache is just .persist with a default storage level of MEMORY_ONLY.  Using persist, we can specify a storage level that determines how the RDD gets saved:
+- MEMORY_ONLY : the RDD will be saved in memory.  If this is not possible, the RDD will be recomputed instead the next time we use it.
+- MEMORY_AND_DISK : the RDD will be saved in memory if possible.  If it's not possible to save in memory, it will be saved to local disk.  If neither are possible, the RDD will be recomputed instead the next time we use it.
+- MEMORY_ONLY_SER, MEMORY_AND_DISK_SER : Similar to the above, but the RDD will be serialized when it is saved and deserialized when it is retrieved.  Serializing is just saving as bytes, there are multiple tools we can use to serialize/deserialize (though we also have defaults).  Using the _SER levels means we'll use less space, but we'll need more computer power to run the serialization and deserialization.  
+- MEMORY_ONLY_2, MEMORY_ONLY_SER_2, MEMORY_AND_DISK_2, MEMORY_AND_DISK_SER_2 : The _2 means that the RDD will be persisted in multiple places (on multiple executors) across the cluster.  This is useful if we have an excess of memory and want to ensure we have data locality for our persisted RDDs.
+- DISK_ONLY : caches the RDD to disk, can be used with _2
+
 
 
 
