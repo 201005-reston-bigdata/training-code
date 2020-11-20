@@ -44,4 +44,33 @@ Zookeeper is a service that maintains information about cluster configuration in
 
 ### Kafka Partitions
 
-Kafka is built to be scalable, which means its individual topics must be able to scale as well.  The way that Kafka does this is by partitioned each topic.  We choose (or have Kafka choose for us) some value in our events in a topic to use as a key to partition by.  Kafka then hashes the key and assigns the event to the appropriate partition.  All of the events that hash to the same value will be found in the same partition.
+Kafka is built to be scalable, which means its individual topics must be able to scale as well.  The way that Kafka does this is by partitioning each topic.  We choose (or have Kafka choose for us) some value in our events in a topic to use as a key to partition by.  Kafka then hashes the key and assigns the event to the appropriate partition.  All of the events that hash to the same value will be found in the same partition.  Kafka guarantees that events will maintain their order within partitions, but not necessarily between partitions.  This is why we often want to choose the key Kafka uses to partition, so we can maintain exact order in important contexts.
+
+Each partition in Kafka is replicated across the cluster.  We will have a replication factor (number of replications).  We'll have a leader/followers, where the leader is responsible for writes and the followers are used for backup and reads.  When a leader fails, one of the followers is elected as a leader.
+
+Leader and follower here are both brokers, so they're both nodes in Kafka.  They communicate with producers and consumers (who are most often external) and manage the events in topics.
+
+### Events
+
+key value pairs that are ordered in a channel/topic in Kafka.  They are like messages in messaging queues or other pub-sub setups.  We call them events because they represent events occuring somewhere in your distributed system, and they go through Kafka topics so that all the necessary pieces of your distributed system are notified.
+
+One way to think about "events" instead of "messages" is that we want each individual piece of our distributed system to only be responsible for letting the rest of the system know an event has occurred, instead of being responsible for specifying what to do with that event.
+
+Example: FB has servers in the US and Germany due to GDPR requirements, but these two servers need to maintain consistent state.  Liam (US) and Marie(Germany) become friends on facebook, initiated on the German side.
+Now, state must become consistent between the two servers, this means the US server needs to catch up with the German server.  To do this, the US server must be notified.  Two ways:
+
+messages:
+German server sends "Make Liam + Marie friends" to US server
+US server reads the message and does that
+
+events:
+German server sends "Liam + Marie became friends" to US Server
+US server makes that change as appropriate
+
+With the event approach, the german server is only responsible for notifying what happened, rather than worrying at all about what should be done/who should do it.
+
+^ A bit unwieldly.
+
+Note that events are immutable once they occur.  Events have an order in a topic.  The order may or may not exactly match the order the events were received by kafka.  Within partitions though, the order will match the order events were received by kafka.
+
+

@@ -15,11 +15,11 @@ object KafkaRunner {
       .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "localhost:9092")
-      .option("subscribe", "qs")
+      .option("subscribe", "important-events")
       .load()
 
     df
-      .select($"value".cast(String))
+      .select("value")
       .writeStream
       .outputMode("append")
       .format("console")
