@@ -74,3 +74,49 @@ With the event approach, the german server is only responsible for notifying wha
 Note that events are immutable once they occur.  Events have an order in a topic.  The order may or may not exactly match the order the events were received by kafka.  Within partitions though, the order will match the order events were received by kafka.
 
 
+### Kafka source in Spark
+
+When Spark is a kafka consumer, we read in topic(s) from kafka as DataFrames.  The Dataframe we get from a topic or set of topics has the following columns:
+- key : key used to determine partition, binary
+- value : content of the event, often large + serialized object, binary
+- topic : string
+- partition : int
+- offset : where in the topic log we're reading from, long
+- timestamp : timestamp
+- timestampType : int
+- headers : array (optional)
+
+The key and value are both serialized.  This lets us more efficiently transfer our events.  We deserialize in Spark.
+
+### Kafka sink in Spark
+
+When we use Spark as a kafka producer, we write to one or more topics from dataframes.  The DataFrame we write *needs* to have a column called value, which will be the value of the event.  We can also have:
+- key : binary or string
+- topic : useful if we have one dataframe writing to potentially multiple different topics, string
+- partiton : to manually specify, int
+- headers : optional, array
+
+### Bonus p3 topics! :
+
+### V quick Agile dev:
+In practice, what this means for us is that we'll do daily "standups" and maybe track progress using trello or similar.  Every day during p3 we'll meet in the morning and go around talking about what we've been doing, what we have planned for the day, and any "blockers", reasons that we can't achieve something we'd like to.
+
+My preference for p3s is to have leads and floaters, so we'll split up the project in rough categories of tasks and have leads for each of those, then have others float between those categories of tasks as necessary.  We'll discuss this more once we have project spec, which will make it easier.
+Another nice thing to do for p3 is to have "point person" for new technologies, this means have someone become the person to ask about, for instance k8s (or some subset).  Being the point person doesn't mean you need to know all the answers, as a point person you can also reach out to Adam or project team.
+
+### Docker:
+Docker is a tool that's wildly popular for devops and deployment of applications generally.  Docker lets us run "docker containers" which are like VMs but more lightweight.  Using Docker containers let us easily and almost foolproof-ly deploy our applications in many different environments.  Our docker containers run the same everywhere there is a linux kernel, removing headaches from deployment.  We can include operating system and all dependencies in the container so no manual setup is required.
+
+### Kubernetes (k8s):
+Kubernetes is a tool for "container orchestration".  We use Kubernetes to deploy clusters of docker containers.  We set up a k8s cluster (or get one from a cloud provider), then we give the k8s cluster some declarative configuration files that describe the deployment we want, then k8s produces that deployment for us.  There's monitoring and fault tolerance built in, and all the individual "machines" and "applications" running on the cluster are in Docker containers.
+
+kinda fun comic/ad for GCP: https://cloud.google.com/kubernetes-engine/kubernetes-comic
+
+### DevOps:
+The combination of Development and Operations, where Development is the process of writing applications and Operations is the process of deploying and maintaining those applications.  This might look like having your devlopers be responsible for deploying their own microservices/applications, or it might involve having Site Reliability Engineers work in a DevOps role that collaborates with developers and operations.  Some people use DevOps to refer more to Development tools + processes for the purpose of Operations (creating automated, version controlled pipelines for deployment).
+
+The new trendy term is DevSecOps, which is DevOps plus security, since security should be a focus throughout both dev and operations
+
+^We'll work with the project team on this stuff, and we can have some freedom in terms of what we want to do / how much new assorted cluster tech we want to learn.
+
+I believe the plan to is also use the ELK stack, though don't quote me on that.  The general idea of the ELK stack is you have all your logcs from your distributed application going go to Elasticsearch via Logstash and then turned into analytics dashboards using Kibana.
